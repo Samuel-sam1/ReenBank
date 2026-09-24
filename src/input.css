@@ -1,0 +1,8 @@
+@import "tailwindcss";
+
+@theme {
+  --color-reen-green: #19B66B;
+  --color-reen-light: #DDF7EE;
+  --color-reen-dark: #073B2A;
+  --color-reen-purple: #5645A5;
+}
