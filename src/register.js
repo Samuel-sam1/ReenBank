@@ -197,7 +197,7 @@ function showOTPModal( title, message, type = "success") {
 otpModalButton.addEventListener("click", function () {
   const action = otpModalButton.dataset.action;
   if (action === "dashboard") {
-    window.location.replace("dashboard.html");
+    window.location.replace("account.html");
     return;
   }
   if (action === "login") {

@@ -4,9 +4,20 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
   <title>Reen Bank</title>
+  <script src="https://cdn.tailwindcss.com"></script>
   <link href="./output.css" rel="stylesheet">
  <link rel="shortcut icon" href="assets/image 32.png" type="image/x-icon">
 </head>
+<style>
+    /* Subtle fade-in animation for when the left content changes */
+    @keyframes fadeIn {
+      from { opacity: 0; transform: translateY(5px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+    .animate-fade-in {
+      animation: fadeIn 0.3s ease-out forwards;
+    }
+  </style>
 <body class="bg-white text-gray-900 antialiased">
        <!-- HEADER -->
   <header id="site-header" class="absolute top-0 left-0 right-0 z-50">
@@ -240,180 +251,32 @@ Reen Bank could offer investment services for customers looking to grow their we
       </div>
     </section>
          <!-- FAQ SECTION -->
-<section
-  id="faqs"
-  class="relative overflow-hidden bg-[#DDF7EE] py-16 sm:py-20 lg:py-24"
->
+<section id="faqs" class="relative overflow-hidden bg-[#DDF7EE] py-16 sm:py-20 lg:py-24 min-h-[600px]">
+    
+    <!-- Decorative shapes -->
+    <div class="absolute -left-28 top-10 w-64 h-64 rounded-full border-[28px] border-white/50"></div>
+    <div class="absolute -right-10 -top-20 w-64 h-64 rounded-full border-[35px] border-[#B8D8CD]"></div>
+    <div class="absolute right-28 bottom-5 w-20 h-20 rounded-full bg-[#B8D8CD]"></div>
+    
+    <div class="relative max-w-7xl mx-auto px-5 sm:px-8 lg:px-10">
+      
+      <h2 class="text-3xl sm:text-4xl font-semibold text-[#222222]">
+        FAQs
+      </h2>
 
-  <!-- Decorative shapes -->
-  <div class="absolute -left-28 top-10 w-64 h-64 rounded-full border-[28px] border-white/50"></div>
-  <div class="absolute -right-10 -top-20 w-64 h-64 rounded-full border-[35px] border-[#B8D8CD]"></div>
-  <div class="absolute right-28 bottom-5 w-20 h-20 rounded-full bg-[#B8D8CD]"></div>
-  <div class="relative max-w-7xl mx-auto px-5 sm:px-8 lg:px-10">
+      <!-- Main Layout Grid -->
+      <div id="faq-list" class="grid grid-cols-1 lg:grid-cols-2 gap-x-20 mt-14">
+        
+        <!-- LEFT SIDE: Active FAQ will be injected here -->
+        <div id="faq-left" class="min-h-[250px]"></div>
 
-    <h2
-      class="text-3xl sm:text-4xl font-semibold text-[#222222]"
-    >
-      FAQs
-    </h2>
-
-
-    <div id="faq-list" class="grid grid-cols-1 lg:grid-cols-2 gap-x-20 mt-14"
-    >
-
-      <!-- LEFT SIDE -->
-
-      <div id="faq-left">
-
-        <!-- Main FAQ -->
-
-        <div id="faq-main" class="max-w-lg"
-        >
-
-          <button id="faq-main-button" type="button" data-faq="main" class="text-left">
-
-            <h3 class="text-lg sm:text-xl font-semibold text-[#1DB779] underline underline-offset-4 leading-7">
-              <a href="">
-
-                How do I sign up for an account with
-                <br class="hidden sm:block">
-                Reen Bank?
-              </a>
-            </h3>
-
-          </button>
-
-
-          <div
-            id="faq-main-content"
-            class="mt-8"
-          >
-
-            <p
-              class="text-sm leading-6 text-gray-600 max-w-lg"
-            >
-              You can sign up for an account with Reen Bank
-              online by visiting our website and filling out
-              the online application form. Once your application
-              is approved, you will receive instructions for
-              setting up your account and accessing our online
-              banking platform.
-            </p>
-
-          </div>
-
-        </div>
-
-      </div>
-
-
-      <!-- RIGHT SIDE -->
-
-      <div
-        id="faq-right"
-        class="mt-10 lg:mt-0 space-y-6"
-      >
-
-        <!-- FAQ ITEM -->
-
-        <button
-          id="faq-account-types"
-          type="button"
-          data-faq="account-types"
-          class="w-full flex items-center justify-between gap-6 text-left group"
-        >
-
-          <span
-            class="text-sm sm:text-base font-semibold text-[#45278D] underline underline-offset-2"
-          >
-            What types of accounts does Reen Bank offer?
-          </span>
-
-          <i
-            data-lucide="arrow-right"
-            class="w-5 h-5 shrink-0 text-[#45278D] group-hover:translate-x-1 transition-transform"
-          ></i>
-
-        </button>
-
-
-        <!-- FAQ ITEM -->
-
-        <button
-          id="faq-fdic"
-          type="button"
-          data-faq="fdic"
-          class="w-full flex items-center justify-between gap-6 text-left group"
-        >
-
-          <span
-            class="text-sm sm:text-base font-semibold text-[#45278D] underline underline-offset-2"
-          >
-            Is Reen Bank FDIC insured?
-          </span>
-
-          <i
-            data-lucide="arrow-right"
-            class="w-5 h-5 shrink-0 text-[#45278D] group-hover:translate-x-1 transition-transform"
-          ></i>
-
-        </button>
-
-
-        <!-- FAQ ITEM -->
-
-        <button
-          id="faq-access"
-          type="button"
-          data-faq="access"
-          class="w-full flex items-center justify-between gap-6 text-left group"
-        >
-
-          <span
-            class="text-sm sm:text-base font-semibold text-[#45278D] underline underline-offset-2"
-          >
-            How can I access my Reen Bank account online?
-          </span>
-
-          <i
-            data-lucide="arrow-right"
-            class="w-5 h-5 shrink-0 text-[#45278D] group-hover:translate-x-1 transition-transform"
-          ></i>
-
-        </button>
-
-
-        <!-- FAQ ITEM -->
-
-        <button
-          id="faq-security"
-          type="button"
-          data-faq="security"
-          class="w-full flex items-center justify-between gap-6 text-left group"
-        >
-
-          <span
-            class="text-sm sm:text-base font-semibold text-[#45278D] underline underline-offset-2"
-          >
-            How secure is Reen Bank and what security
-            measures does Reen Bank have in place to
-            protect my financial information?
-          </span>
-
-          <i
-            data-lucide="arrow-right"
-            class="w-5 h-5 shrink-0 text-[#45278D] group-hover:translate-x-1 transition-transform"
-          ></i>
-
-        </button>
-
+        <!-- RIGHT SIDE: Inactive FAQs will be injected here -->
+        <div id="faq-right" class="mt-10 lg:mt-0 space-y-6 flex flex-col justify-start"></div>
+        
       </div>
 
     </div>
-
-  </div>
-
-</section>
+  </section>
     <!-- =====================================================
          SUPPORTED SERVICES
          ===================================================== -->

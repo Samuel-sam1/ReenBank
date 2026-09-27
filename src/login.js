@@ -45,7 +45,7 @@ function showModal(title, message, type = "success") {
 // CLOSE MODAL
 modalButton.addEventListener("click", function () {
   if (modalButton.dataset.action === "dashboard") {
-    window.location.replace("dashboard.html");
+    window.location.replace("account.html");
   } else {
     loginModal.classList.add("hidden");
   }

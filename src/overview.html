@@ -1,0 +1,300 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Reen Bank - Overview</title>
+    <link href="./output.css" rel="stylesheet">
+  <link rel="shortcut icon" href="assets/image 32.png" type="image/x-icon">
+  <style>
+    .hide-scrollbar::-webkit-scrollbar { display: none; }
+    .hide-scrollbar { -ms-overflow-style: none; scrollbar-width: none; }
+  </style>
+</head>
+<body class="bg-[#F6FBF9] text-[#073B2A] font-sans h-screen flex overflow-hidden relative">
+
+  <!-- Mobile Header -->
+  <div class="lg:hidden absolute top-0 left-0 right-0 h-16 bg-[#F6FBF9] flex items-center justify-between px-6 border-b border-gray-100 z-50">
+    <div class="flex items-center gap-2">
+      <div class="w-8 h-8 border-2 border-[#19B66B] rounded-lg flex items-center justify-center font-bold text-[#19B66B]">rb</div>
+      <h1 class="text-xl font-bold text-gray-900">Reen Bank</h1>
+    </div>
+    <button class="text-gray-500 hover:text-[#073B2A]">
+      <i data-lucide="menu" class="w-6 h-6"></i>
+    </button>
+  </div>
+
+  <!-- Sidebar -->
+  <aside class="hidden lg:flex w-64 bg-[#F6FBF9] flex-col justify-between py-8 px-6 border-r border-gray-100 z-40">
+    <div>
+      <div class="flex items-center gap-3 mb-12">
+        <div class="w-10 h-10 border-2 border-[#19B66B] rounded-xl flex items-center justify-center font-bold text-[#19B66B] text-xl bg-[#F6FBF9]">
+          rb
+        </div>
+        <h1 class="text-2xl font-bold text-gray-900">Reen Bank</h1>
+      </div>
+      <nav class="space-y-6">
+        <a href="account.html" class="flex items-center gap-4 text-gray-500 hover:text-[#073B2A] transition-colors">
+          <i data-lucide="credit-card" class="w-5 h-5"></i> Accounts
+        </a>
+        <a href="overview.html" class="flex items-center gap-4 text-[#19B66B] font-semibold">
+          <i data-lucide="layout-grid" class="w-5 h-5"></i> Overview
+        </a>
+        <a href="transaction.html" class="flex items-center gap-4 text-gray-500 hover:text-[#073B2A] transition-colors">
+          <i data-lucide="arrow-left-right" class="w-5 h-5"></i> Transactions
+        </a>
+        <a href="profile.html" class="flex items-center gap-4 text-gray-500 hover:text-[#073B2A] transition-colors">
+          <i data-lucide="user" class="w-5 h-5"></i> Profile
+        </a>
+      </nav>
+    </div>
+  <!-- Add id="logout-btn" to your sidebar logout link -->
+<a href="#" id="logout-btn" class="flex items-center gap-4 text-gray-500 hover:text-[#073B2A] transition-colors mt-auto">
+  <i data-lucide="arrow-left" class="w-5 h-5"></i> 
+  Logout
+</a>
+  </aside>
+
+  <!-- Main Content -->
+  <main class="flex-1 flex flex-col pt-20 lg:pt-8 pb-8 px-6 lg:px-10 overflow-y-auto w-full">
+    
+    <!-- Top Header -->
+    <header class="flex flex-col md:flex-row justify-between items-start md:items-center gap-6 mb-10 w-full">
+      <h2 class="text-3xl font-bold text-gray-900">Overview</h2>
+      <div class="flex flex-wrap md:flex-nowrap items-center gap-6 md:gap-10">
+        <div class="flex flex-col items-end hidden sm:flex">
+  <!-- Added ID here -->
+  <span id="display-user-name" class="text-[#19B66B] text-sm font-medium">Maureen Oguche</span>
+  
+  <!-- Added ID here -->
+  <span id="display-user-account" class="font-bold text-lg">1234567890</span>
+</div>
+      <!-- UPDATED SEARCH AND NOTIFICATION SECTION -->
+<div class="flex items-center gap-4 md:gap-6 w-full md:w-auto justify-between md:justify-end">
+  
+  <!-- SEARCH -->
+  <div class="relative flex-1 md:flex-none">
+    <i data-lucide="search" class="w-5 h-5 text-gray-400 absolute left-3 top-1/2 -translate-y-1/2"></i>
+    <input type="text" id="global-search" placeholder="Search transactions..." class="pl-10 pr-4 py-2 rounded-full bg-white border border-gray-100 outline-none shadow-sm text-sm w-full md:w-64 focus:ring-2 focus:ring-[#DDF7EE]">
+  </div>
+  
+  <!-- NOTIFICATIONS -->
+  <div class="relative hidden sm:block">
+   <button id="noti-btn" class="relative text-gray-500 hover:text-[#073B2A] transition-colors mt-1">
+  <i data-lucide="bell" class="w-6 h-6"></i>
+  <!-- New Counter Badge -->
+  <span id="noti-badge" class="absolute -top-1.5 -right-1.5 w-4 h-4 bg-red-500 text-white text-[10px] font-bold flex items-center justify-center rounded-full border border-[#F6FBF9] hidden">
+    0
+  </span>
+</button>
+
+    <!-- Notification Dropdown -->
+    <div id="noti-dropdown" class="absolute right-0 mt-3 w-80 bg-white rounded-2xl shadow-xl border border-gray-100 hidden z-50 overflow-hidden">
+      <div class="p-4 border-b border-gray-100 flex justify-between items-center bg-gray-50">
+        <h4 class="font-bold text-gray-900">Notifications</h4>
+        <button id="clear-noti" class="text-xs text-[#19B66B] font-semibold hover:underline">Mark all read</button>
+      </div>
+      <div id="noti-list" class="max-h-80 overflow-y-auto">
+        <!-- Notifications will be injected here by JS -->
+      </div>
+    </div>
+  </div>
+
+ <a href="profile.html">
+    <img src="https://i.pravatar.cc/150?img=12" alt="Profile" class="w-10 h-10 rounded-full object-cover border border-gray-200 hidden sm:block">
+</a>
+</div>
+      </div>
+    </header>
+
+    <!-- Dashboard Grid -->
+    <div class="grid grid-cols-1 lg:grid-cols-12 gap-10">
+      
+      <!-- Left Column (Main Stats & Accounts) -->
+      <div class="lg:col-span-8 flex flex-col gap-10">
+        
+        <!-- Current Account Balance -->
+        <section>
+          <div class="flex justify-between items-center mb-4">
+            <h3 class="text-xl font-bold">Current Account Balance</h3>
+            <div class="flex gap-2">
+              <button onclick="toggleGlobalVisibility()" class="p-2 bg-gray-100 rounded-lg hover:bg-gray-200 text-gray-600 transition-colors">
+                <i id="global-eye-icon" data-lucide="eye-off" class="w-4 h-4"></i>
+              </button>
+              <button class="flex items-center gap-2 px-3 py-2 bg-gray-100 rounded-lg hover:bg-gray-200 text-xs font-medium text-gray-600">
+                <i data-lucide="calendar" class="w-4 h-4"></i>
+                Feb 22 - Mar 21, 2023
+                <i data-lucide="chevron-down" class="w-4 h-4"></i>
+              </button>
+            </div>
+          </div>
+          
+          <div class="bg-[#DDF7EE] rounded-2xl p-6 flex flex-wrap items-center gap-6 md:gap-12 shadow-sm">
+            <div class="w-14 h-14 border-2 border-[#19B66B] rounded-xl flex items-center justify-center font-bold text-[#19B66B] text-2xl bg-[#F6FBF9]">
+              rb
+            </div>
+            <div>
+              <p class="text-[#5645A5] text-xs font-medium mb-1">Current Balance</p>
+              <p id="total-balance" class="text-2xl font-bold text-gray-900">₦ 0.00</p>
+            </div>
+            <div>
+              <p class="text-[#5645A5] text-xs font-medium mb-1">Income</p>
+              <p id="total-income" class="text-2xl font-bold text-gray-900">₦ 0.00</p>
+            </div>
+            <div>
+              <p class="text-[#5645A5] text-xs font-medium mb-1">Expense</p>
+              <p id="total-expense" class="text-2xl font-bold text-gray-900">₦ 0.00</p>
+            </div>
+          </div>
+        </section>
+
+        <!-- Accounts Grid -->
+        <section>
+          <div class="flex justify-between items-center mb-4">
+            <h3 class="text-xl font-bold">Accounts</h3>
+            <button onclick="openAddAccountModal()" class="p-2 bg-gray-100 rounded-lg hover:bg-gray-200 text-gray-600 transition-colors">
+              <i data-lucide="plus" class="w-4 h-4"></i>
+            </button>
+          </div>
+          
+          <div id="overview-accounts-wrapper" class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-6">
+            <!-- Accounts will be injected here dynamically -->
+          </div>
+        </section>
+
+        <!-- Statistics -->
+        <section>
+          <div class="flex justify-between items-center mb-6">
+            <h3 class="text-xl font-bold">Statistics</h3>
+            <button class="flex items-center gap-2 px-3 py-2 bg-gray-100 rounded-lg hover:bg-gray-200 text-xs font-medium text-gray-600">
+              This Month
+              <i data-lucide="chevron-down" class="w-4 h-4"></i>
+            </button>
+          </div>
+          
+          <div class="space-y-6">
+            <!-- Income Bar -->
+            <div class="flex items-center justify-between gap-6">
+              <div class="flex items-center gap-4 w-1/4">
+                 <div class="w-10 h-10 border-2 border-[#19B66B] rounded-xl flex items-center justify-center font-bold text-[#19B66B] text-lg bg-[#F6FBF9]">
+                  rb
+                </div>
+                <span class="font-bold text-gray-900">Income</span>
+              </div>
+              <div class="flex-1 bg-gray-200 h-3 rounded-full overflow-hidden">
+                <div id="stat-income-bar" class="bg-[#19B66B] h-full rounded-full transition-all duration-500" style="width: 0%;"></div>
+              </div>
+              <div class="w-1/4 text-right">
+                <span id="stat-income-text" class="font-bold text-lg text-gray-900">₦ 0.00</span>
+              </div>
+            </div>
+
+            <!-- Expense Bar -->
+            <div class="flex items-center justify-between gap-6">
+              <div class="flex items-center gap-4 w-1/4">
+                 <div class="w-10 h-10 border-2 border-red-400 rounded-xl flex items-center justify-center font-bold text-red-400 text-lg bg-[#F6FBF9]">
+                  rb
+                </div>
+                <span class="font-bold text-gray-900">Expense</span>
+              </div>
+              <div class="flex-1 bg-gray-200 h-3 rounded-full overflow-hidden">
+                <div id="stat-expense-bar" class="bg-red-500 h-full rounded-full transition-all duration-500" style="width: 0%;"></div>
+              </div>
+              <div class="w-1/4 text-right">
+                <span id="stat-expense-text" class="font-bold text-lg text-gray-900">₦ 0.00</span>
+              </div>
+            </div>
+          </div>
+        </section>
+
+      </div>
+
+      <!-- Right Column (Transactions & Promo) -->
+      <div class="lg:col-span-4 flex flex-col gap-8 h-full">
+        
+        <!-- Transactions List -->
+        <section class="bg-[#F6FBF9] flex-1">
+          <div class="flex justify-between items-center mb-6">
+            <h3 class="text-xl font-bold">Transactions</h3>
+            <a href="transactions.html" class="text-[#19B66B] hover:text-[#073B2A]">
+              <i data-lucide="arrow-right" class="w-5 h-5"></i>
+            </a>
+          </div>
+
+          <div id="overview-transactions-list" class="space-y-4">
+            <!-- Transactions injected dynamically here -->
+          </div>
+        </section>
+
+        <!-- Upgrade to PRO Card -->
+        <section class="mt-auto pt-6">
+          <div class="bg-[#19B66B] rounded-2xl p-6 text-white relative overflow-hidden shadow-lg h-40 flex flex-col justify-end">
+            <!-- Simulated background pattern overlay -->
+            <div class="absolute inset-0 opacity-20 bg-[radial-gradient(ellipse_at_center,_var(--tw-gradient-stops))] from-white via-transparent to-transparent bg-[length:20px_20px]"></div>
+            
+            <div class="relative z-10">
+              <i data-lucide="arrow-right" class="w-6 h-6 mb-4 text-white"></i>
+              <h4 class="text-xl font-bold mb-1">Upgrade to PRO</h4>
+              <p class="text-sm text-[#DDF7EE]">Sign in on more than one device</p>
+            </div>
+          </div>
+        </section>
+
+      </div>
+    </div>
+  </main>
+
+  <!-- Add New Account Modal -->
+  <div id="addAccountModal" class="fixed inset-0 bg-black/60 z-[100] hidden flex items-center justify-center p-4 backdrop-blur-sm">
+    <div class="bg-white rounded-2xl p-8 w-full max-w-md shadow-2xl transform transition-all">
+      <div class="flex justify-between items-center mb-6">
+        <h3 class="text-2xl font-bold text-gray-900">Create New Account</h3>
+        <button onclick="closeAddAccountModal()" class="text-gray-400 hover:text-gray-700">
+          <i data-lucide="x" class="w-6 h-6"></i>
+        </button>
+      </div>
+      <p class="text-gray-500 text-sm mb-6">Give your new savings or budget plan a name.</p>
+      <div class="mb-6">
+        <input type="text" id="new-account-name" placeholder="e.g. Car Fund, Vacation..." class="w-full px-5 py-4 rounded-xl bg-gray-50 border border-gray-200 outline-none focus:ring-2 focus:ring-[#19B66B] font-medium text-gray-900">
+      </div>
+      <div class="flex gap-4">
+        <button onclick="closeAddAccountModal()" class="flex-1 bg-gray-100 text-gray-600 font-bold py-3.5 rounded-xl hover:bg-gray-200 transition-colors">Cancel</button>
+        <button onclick="submitNewAccount()" class="flex-1 bg-[#5645A5] text-white font-bold py-3.5 rounded-xl hover:bg-[#433580] transition-colors">Create Account</button>
+      </div>
+    </div>
+  </div>
+
+
+  <!-- LOGOUT MODAL -->
+<div id="logout-modal" class="fixed inset-0 bg-black/60 z-[100] hidden flex items-center justify-center p-4 backdrop-blur-sm">
+  <div class="bg-white rounded-2xl p-8 w-full max-w-sm shadow-2xl transform transition-all text-center">
+    
+    <!-- Icon -->
+    <div class="mx-auto mb-5 flex h-16 w-16 items-center justify-center rounded-full bg-red-500/10">
+      <i data-lucide="log-out" class="w-8 h-8 text-red-500"></i>
+    </div>
+    
+    <!-- Text -->
+    <h3 class="text-2xl font-bold text-gray-900 mb-2">Sign Out</h3>
+    <p class="text-gray-500 text-sm mb-8">Are you sure you want to log out of your Reen Bank account?</p>
+    
+    <!-- Buttons -->
+    <div class="flex gap-4">
+      <button id="cancel-logout" class="flex-1 bg-gray-100 text-gray-600 font-bold py-3.5 rounded-xl hover:bg-gray-200 transition-colors">
+        Cancel
+      </button>
+      <button id="confirm-logout" class="flex-1 bg-[#FA6E6E] text-white font-bold py-3.5 rounded-xl hover:bg-red-600 transition-colors">
+        Yes, Logout
+      </button>
+    </div>
+    
+  </div>
+</div>
+  <!-- Scripts -->
+  <script src="https://unpkg.com/lucide@latest"></script>
+  <script src="auth.js"></script>
+  <script src="logout.js"></script> <!-- Ensure Tailwind works, remove if using local config -->
+  <script src="overview.js"></script>
+  <script src="dashboard-ui.js"></script>
+</body>
+</html>
