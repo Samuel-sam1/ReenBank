@@ -13,31 +13,50 @@
 </head>
 <body class="bg-[#F6FBF9] text-[#073B2A] font-sans h-screen flex overflow-hidden relative">
 
-  <!-- Mobile Header -->
-  <div class="lg:hidden absolute top-0 left-0 right-0 h-16 bg-[#F6FBF9] flex items-center justify-between px-6 border-b border-gray-100 z-50">
+   <!-- 1. Mobile Header -->
+  <div class="lg:hidden absolute top-0 left-0 right-0 h-16 bg-[#F6FBF9] flex items-center justify-between px-6 border-b border-gray-100 z-40">
     <div class="flex items-center gap-2">
-      <div class="w-8 h-8 border-2 border-[#19B66B] rounded-lg flex items-center justify-center font-bold text-[#19B66B]">rb</div>
-   <img src="assets/logo.png" alt="">
+     
+
+      <img src="assets/logo.png" alt="Reen Bank" class="h-5">
     </div>
-    <button class="text-gray-500 hover:text-[#073B2A]">
+    <!-- Added ID here to trigger the JS -->
+    <button id="mobile-menu-btn" class="text-gray-500 hover:text-[#073B2A] transition-colors focus:outline-none">
       <i data-lucide="menu" class="w-6 h-6"></i>
     </button>
   </div>
 
-  <!-- Sidebar -->
-  <aside class="hidden lg:flex w-64 bg-[#F6FBF9] flex-col justify-between py-8 px-6 border-r border-gray-100 z-40">
+  <!-- 2. Dark Overlay (Hidden by default, covers screen behind menu) -->
+  <div id="mobile-overlay" class="fixed inset-0 bg-black/60 z-40 hidden transition-opacity duration-300 opacity-0 lg:hidden backdrop-blur-sm"></div>
+
+  <!-- 3. Sidebar Menu (Slides in from the left on mobile, static on desktop) -->
+  <aside id="mobile-sidebar" class="fixed inset-y-0 left-0 z-50 w-64 bg-[#F6FBF9] flex flex-col justify-between py-8 px-6 border-r border-gray-100 transform -translate-x-full transition-transform duration-300 lg:relative lg:translate-x-0 lg:flex h-full">
+    
     <div>
-      <div class="flex items-center gap-3 mb-12">
-       <img src="assets/logo.png" alt="">
+      <!-- Top: Logo and Close Button -->
+      <div class="flex items-center justify-between mb-12">
+        <div class="flex items-center gap-3">
+          <div class="w-24 h-24  rounded-xl flex items-center justify-center font-bold">
+            <img src="assets/logo.png" alt="">
+          </div>
+          <h1 class="text-2xl font-bold text-gray-900 hidden lg:block">Reen Bank</h1>
+        </div>
+        
+        <!-- Close button (Only visible on mobile) -->
+        <button id="close-menu-btn" class="lg:hidden text-gray-400 hover:text-gray-800 focus:outline-none">
+          <i data-lucide="x" class="w-6 h-6"></i>
+        </button>
       </div>
+
+      <!-- Navigation Links -->
       <nav class="space-y-6">
-        <a href="account.html" class="flex items-center gap-4 text-gray-500 hover:text-[#073B2A] transition-colors">
-          <i data-lucide="credit-card" class="w-5 h-5"></i> Accounts
-        </a>
         <a href="overview.html" class="flex items-center gap-4 text-gray-500 hover:text-[#073B2A] transition-colors">
           <i data-lucide="layout-grid" class="w-5 h-5"></i> Overview
         </a>
-        <a href="transactions.html" class="flex items-center gap-4 text-[#19B66B] font-semibold">
+        <a href="account.html" class="flex items-center gap-4 text-[#19B66B] font-semibold">
+          <i data-lucide="credit-card" class="w-5 h-5"></i> Accounts
+        </a>
+        <a href="transaction.html" class="flex items-center gap-4 text-gray-500 hover:text-[#073B2A] transition-colors">
           <i data-lucide="arrow-left-right" class="w-5 h-5"></i> Transactions
         </a>
         <a href="profile.html" class="flex items-center gap-4 text-gray-500 hover:text-[#073B2A] transition-colors">
@@ -45,12 +64,13 @@
         </a>
       </nav>
     </div>
-  <!-- Add id="logout-btn" to your sidebar logout link -->
-<a href="#" id="logout-btn" class="flex items-center gap-4 text-gray-500 hover:text-[#073B2A] transition-colors mt-auto">
-  <i data-lucide="arrow-left" class="w-5 h-5"></i> 
-  Logout
-</a>
+
+    <!-- Logout Link at the Bottom -->
+    <a href="#" id="logout-btn" class="flex items-center gap-4 text-[#FA6E6E] hover:text-red-700 transition-colors mt-auto font-medium">
+      <i data-lucide="log-out" class="w-5 h-5"></i> Logout
+    </a>
   </aside>
+
 
   <!-- Main Content -->
   <main class="flex-1 flex flex-col pt-20 lg:pt-8 pb-8 px-6 lg:px-10 overflow-y-auto w-full">
