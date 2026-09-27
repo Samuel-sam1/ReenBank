@@ -13,23 +13,38 @@
 </head>
 <body class="bg-[#F6FBF9] text-[#073B2A] font-sans h-screen flex overflow-hidden relative">
 
-  <!-- Mobile Header -->
-  <div class="lg:hidden absolute top-0 left-0 right-0 h-16 bg-[#F6FBF9] flex items-center justify-between px-6 border-b border-gray-100 z-50">
-    <div class="flex items-center gap-2 w-24 h-24">
-     
-   <img src="assets/logo.png" alt="">
+ <!-- 1. Mobile Header -->
+  <div class="lg:hidden absolute top-0 left-0 right-0 h-16 bg-[#F6FBF9] flex items-center justify-between px-6 border-b border-gray-100 z-40">
+    <!-- Adjusted logo to fit inside the 16 height header without breaking -->
+    <div class="flex items-center gap-2 w-32 h-full py-2">
+      <img src="assets/logo.png" alt="Reen Bank Logo" class="h-full w-full object-contain object-left">
     </div>
-    <button class="text-gray-500 hover:text-[#073B2A]">
+    <!-- Added id="mobile-menu-btn" -->
+    <button id="mobile-menu-btn" class="text-gray-500 hover:text-[#073B2A] transition-colors focus:outline-none">
       <i data-lucide="menu" class="w-6 h-6"></i>
     </button>
   </div>
 
-  <!-- Sidebar -->
-  <aside class="hidden lg:flex w-64 bg-[#F6FBF9] flex-col justify-between py-8 px-6 border-r border-gray-100 z-40">
+  <!-- 2. Dark Overlay (Hidden by default) -->
+  <div id="mobile-overlay" class="fixed inset-0 bg-black/60 z-40 hidden transition-opacity duration-300 opacity-0 lg:hidden backdrop-blur-sm"></div>
+
+  <!-- 3. Sidebar (Slides in on mobile, Static on desktop) -->
+  <aside id="mobile-sidebar" class="fixed inset-y-0 left-0 z-50 w-64 shrink-0 bg-[#F6FBF9] flex flex-col justify-between py-8 px-6 border-r border-gray-100 transform -translate-x-full transition-transform duration-300 lg:static lg:translate-x-0 h-full">
+    
     <div>
-      <div class="flex items-center gap-3 mb-12 w-28 h-28">
-       <img src="assets/logo.png" alt="">
+      <!-- Sidebar Header (Logo & Close Button) -->
+      <div class="flex items-center justify-between mb-12">
+        <div class="flex items-center gap-2 w-32 h-10">
+          <img src="assets/logo.png" alt="Reen Bank Logo" class="h-full w-full object-contain object-left">
+        </div>
+        
+        <!-- Close button (Only visible on mobile) -->
+        <button id="close-menu-btn" class="lg:hidden text-gray-400 hover:text-[#073B2A] focus:outline-none">
+          <i data-lucide="x" class="w-6 h-6"></i>
+        </button>
       </div>
+
+      <!-- Navigation -->
       <nav class="space-y-6">
         <a href="account.html" class="flex items-center gap-4 text-gray-500 hover:text-[#073B2A] transition-colors">
           <i data-lucide="credit-card" class="w-5 h-5"></i> Accounts
@@ -37,6 +52,7 @@
         <a href="overview.html" class="flex items-center gap-4 text-gray-500 hover:text-[#073B2A] transition-colors">
           <i data-lucide="layout-grid" class="w-5 h-5"></i> Overview
         </a>
+        <!-- Active State for Transactions -->
         <a href="transaction.html" class="flex items-center gap-4 text-[#19B66B] font-semibold">
           <i data-lucide="arrow-left-right" class="w-5 h-5"></i> Transactions
         </a>
@@ -45,19 +61,19 @@
         </a>
       </nav>
     </div>
-  <!-- Add id="logout-btn" to your sidebar logout link -->
-<a href="#" id="logout-btn" class="flex items-center gap-4 text-gray-500 hover:text-[#073B2A] transition-colors mt-auto">
-  <i data-lucide="arrow-left" class="w-5 h-5"></i> 
-  Logout
-</a>
+
+    <!-- Logout Link -->
+    <a href="#" id="logout-btn" class="flex items-center gap-4 text-gray-500 hover:text-red-500 transition-colors mt-auto font-medium">
+      <i data-lucide="arrow-left" class="w-5 h-5"></i> Logout
+    </a>
   </aside>
 
-  <!-- Main Content -->
-  <main class="flex-1 flex flex-col pt-20 lg:pt-8 pb-8 px-6 lg:px-10 overflow-y-auto w-full">
+ <!-- 4. Main Content (Added min-w-0 to fix desktop overlap issues) -->
+  <main class="flex-1 min-w-0 flex flex-col pt-20 lg:pt-8 pb-8 px-6 lg:px-10 overflow-y-auto w-full h-full">
     
-    <!-- Top Header -->
     <header class="flex flex-col md:flex-row justify-between items-start md:items-center gap-6 mb-10 w-full">
       <h2 class="text-3xl font-bold text-gray-900">Transactions</h2>
+       <!-- ... Rest of your header elements remain exactly the same ... -->
       
       <div class="flex flex-wrap md:flex-nowrap items-center gap-6 md:gap-10">
        <div class="flex flex-col items-end hidden sm:flex">
