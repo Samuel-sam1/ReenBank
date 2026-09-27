@@ -68,13 +68,13 @@ function renderAccounts() {
             <p class="text-[#5645A5] text-sm font-medium mb-1">${acc.name}</p>
             <p class="text-2xl font-bold text-gray-900">${balanceDisplay}</p>
           </div>
-          <button onclick="toggleVisibility('${acc.id}')" class="text-gray-500 hover:text-gray-700">
+          <button onclick="toggleVisibility('${acc.id}')" class=" cursor-pointer text-gray-500 hover:text-gray-700">
             <i data-lucide="${eyeIcon}" class="w-4 h-4"></i>
           </button>
         </div>
         <div class="flex gap-3 mt-4">
-          <button onclick="openTxModal('${acc.id}', 'fund')" class="flex-1 bg-[#19B66B] text-white text-sm font-medium py-2 rounded-lg hover:bg-green-600 transition-colors">Fund</button>
-          <button onclick="openTxModal('${acc.id}', 'withdraw')" class="flex-1 bg-gray-200 text-gray-600 text-sm font-medium py-2 rounded-lg hover:bg-gray-300 transition-colors">Withdraw</button>
+          <button onclick="openTxModal('${acc.id}', 'fund')" class="cursor-pointer flex-1 bg-[#19B66B] text-white text-sm font-medium py-2 rounded-lg hover:bg-green-600 transition-colors">Fund</button>
+          <button onclick="openTxModal('${acc.id}', 'withdraw')" class="cursor-pointer flex-1 bg-gray-200 text-gray-600 text-sm font-medium py-2 rounded-lg hover:bg-gray-300 transition-colors">Withdraw</button>
         </div>
       </div>
     `;

@@ -119,3 +119,57 @@ function updateNotificationBadge() {
   updateNotificationBadge();
 
 });
+// Wait for the DOM to fully load
+document.addEventListener("DOMContentLoaded", () => {
+  
+  // 1. Get Elements
+  const mobileMenuBtn = document.getElementById("mobile-menu-btn");
+  const closeMenuBtn = document.getElementById("close-menu-btn");
+  const mobileSidebar = document.getElementById("mobile-sidebar");
+  const mobileOverlay = document.getElementById("mobile-overlay");
+
+  // 2. Open Menu Function
+  function openMenu() {
+    // Show overlay first
+    mobileOverlay.classList.remove("hidden");
+    
+    // Slight delay so the opacity transition works smoothly
+    setTimeout(() => {
+      mobileOverlay.classList.remove("opacity-0");
+      mobileOverlay.classList.add("opacity-100");
+    }, 10);
+    
+    // Slide in the sidebar
+    mobileSidebar.classList.remove("-translate-x-full");
+  }
+
+  // 3. Close Menu Function
+  function closeMenu() {
+    // Slide out the sidebar
+    mobileSidebar.classList.add("-translate-x-full");
+    
+    // Fade out overlay
+    mobileOverlay.classList.remove("opacity-100");
+    mobileOverlay.classList.add("opacity-0");
+    
+    // Hide overlay completely after the animation finishes (300ms matches Tailwind duration)
+    setTimeout(() => {
+      mobileOverlay.classList.add("hidden");
+    }, 300); 
+  }
+
+  // 4. Attach Event Listeners
+  if (mobileMenuBtn) {
+    mobileMenuBtn.addEventListener("click", openMenu);
+  }
+
+  if (closeMenuBtn) {
+    closeMenuBtn.addEventListener("click", closeMenu);
+  }
+
+  // Allow users to close the menu by clicking on the dark background
+  if (mobileOverlay) {
+    mobileOverlay.addEventListener("click", closeMenu);
+  }
+
+});

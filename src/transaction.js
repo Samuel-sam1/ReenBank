@@ -46,7 +46,7 @@ function renderAccountSummaries() {
             <p class="text-[#5645A5] text-sm font-medium mb-1">${acc.name}</p>
             <p class="text-2xl font-bold text-gray-900">${balanceDisplay}</p>
           </div>
-          <button onclick="toggleVisibility('${acc.id}')" class="text-gray-400 hover:text-gray-700 transition-colors">
+          <button onclick="toggleVisibility('${acc.id}')" class="cursor-pointer text-gray-400 hover:text-gray-700 transition-colors">
             <i data-lucide="${eyeIcon}" class="w-4 h-4"></i>
           </button>
         </div>
