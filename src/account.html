@@ -71,7 +71,7 @@
     </div>
 
     <!-- Logout Link -->
-    <a href="#" id="logout-btn" class="flex items-center gap-4 text-gray-500 hover:text-red-500 transition-colors mt-auto font-medium">
+    <a href="#" id="logout-btn" class="flex items-center gap-4  text-[#FA6E6E] hover:text-red-700 transition-colors mt-auto font-medium">
       <i data-lucide="log-out" class="w-5 h-5"></i> Logout
     </a>
   </aside>
@@ -172,8 +172,8 @@
         <input type="number" id="tx-amount" placeholder="0.00" class="w-full pl-10 pr-4 py-4 rounded-xl bg-gray-50 border border-gray-200 outline-none focus:ring-2 focus:ring-[#19B66B] text-xl font-bold text-gray-900">
       </div>
       <div class="flex gap-4">
-        <button onclick="closeTxModal()" class="flex-1 bg-gray-100 text-gray-600 font-bold py-3.5 rounded-xl hover:bg-gray-200 transition-colors">Cancel</button>
-        <button onclick="processTransaction()" id="modal-submit-btn" class="flex-1 bg-[#19B66B] text-white font-bold py-3.5 rounded-xl hover:bg-green-600 transition-colors">Proceed</button>
+        <button onclick="closeTxModal()" class="cursor-pointer flex-1 bg-gray-100 text-gray-600 font-bold py-3.5 rounded-xl hover:bg-gray-200 transition-colors">Cancel</button>
+        <button onclick="processTransaction()" id="modal-submit-btn" class="cursor-pointer flex-1 bg-[#19B66B] text-white font-bold py-3.5 rounded-xl hover:bg-green-600 transition-colors">Proceed</button>
       </div>
     </div>
   </div>
@@ -183,7 +183,7 @@
     <div class="bg-white rounded-2xl p-8 w-full max-w-md shadow-2xl transform transition-all">
       <div class="flex justify-between items-center mb-6">
         <h3 class="text-2xl font-bold text-gray-900">Create New Account</h3>
-        <button onclick="closeAddAccountModal()" class="text-gray-400 hover:text-gray-700">
+        <button onclick="closeAddAccountModal()" class="cursor-pointer text-gray-400 hover:text-gray-700">
           <i data-lucide="x" class="w-6 h-6"></i>
         </button>
       </div>
@@ -192,8 +192,8 @@
         <input type="text" id="new-account-name" placeholder="e.g. Car Fund, Vacation..." class="w-full px-5 py-4 rounded-xl bg-gray-50 border border-gray-200 outline-none focus:ring-2 focus:ring-[#19B66B] font-medium text-gray-900">
       </div>
       <div class="flex gap-4">
-        <button onclick="closeAddAccountModal()" class="flex-1 bg-gray-100 text-gray-600 font-bold py-3.5 rounded-xl hover:bg-gray-200 transition-colors">Cancel</button>
-        <button onclick="submitNewAccount()" class="flex-1 bg-[#5645A5] text-white font-bold py-3.5 rounded-xl hover:bg-[#433580] transition-colors">Create Account</button>
+        <button onclick="closeAddAccountModal()" class="cursor-pointer flex-1 bg-gray-100 text-gray-600 font-bold py-3.5 rounded-xl hover:bg-gray-200 transition-colors">Cancel</button>
+        <button onclick="submitNewAccount()" class="cursor-pointer flex-1 bg-[#5645A5] text-white font-bold py-3.5 rounded-xl hover:bg-[#433580] transition-colors">Create Account</button>
       </div>
     </div>
   </div>
@@ -215,10 +215,10 @@
     
     <!-- Buttons -->
     <div class="flex gap-4">
-      <button id="cancel-logout" class="flex-1 bg-gray-100 text-gray-600 font-bold py-3.5 rounded-xl hover:bg-gray-200 transition-colors">
+      <button id="cancel-logout" class="cursor-pointer flex-1 bg-gray-100 text-gray-600 font-bold py-3.5 rounded-xl hover:bg-gray-200 transition-colors">
         Cancel
       </button>
-      <button id="confirm-logout" class="flex-1 bg-[#FA6E6E] text-white font-bold py-3.5 rounded-xl hover:bg-red-600 transition-colors">
+      <button id="confirm-logout" class="cursor-pointer flex-1 bg-[#FA6E6E] text-white font-bold py-3.5 rounded-xl hover:bg-red-600 transition-colors">
         Yes, Logout
       </button>
     </div>

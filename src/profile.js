@@ -128,3 +128,132 @@ window.addEventListener('DOMContentLoaded', () => {
     lucide.createIcons();
   }
 });
+
+/* =========================================
+   PASSWORD RESET LOGIC
+   ========================================= */
+
+// Get Elements
+const resetPwdBtn = document.getElementById('reset-password-btn');
+const resetModal = document.getElementById('reset-pwd-modal');
+const step1 = document.getElementById('reset-step-1');
+const step2 = document.getElementById('reset-step-2');
+const closeResetBtns = document.querySelectorAll('.close-reset-modal');
+
+// Step 1 Elements
+const emailInput = document.getElementById('reset-verify-email');
+const verifyBtn = document.getElementById('verify-email-btn');
+const emailError = document.getElementById('reset-email-error');
+
+// Step 2 Elements
+const newPwdInput = document.getElementById('new-password');
+const confirmPwdInput = document.getElementById('confirm-new-password');
+const savePwdBtn = document.getElementById('save-new-pwd-btn');
+const pwdError = document.getElementById('reset-pwd-error');
+
+// 1. Open Modal and reset state
+if (resetPwdBtn) {
+  resetPwdBtn.addEventListener('click', () => {
+    // Reset the modal back to step 1 every time it opens
+    step1.classList.remove('hidden');
+    step2.classList.add('hidden');
+    emailInput.value = '';
+    newPwdInput.value = '';
+    confirmPwdInput.value = '';
+    emailError.classList.add('hidden');
+    pwdError.classList.add('hidden');
+    
+    // Show modal
+    resetModal.classList.remove('hidden');
+  });
+}
+
+// 2. Close Modal
+closeResetBtns.forEach(btn => {
+  btn.addEventListener('click', () => {
+    resetModal.classList.add('hidden');
+  });
+});
+
+// 3. Verify Email (Step 1 -> Step 2)
+if (verifyBtn) {
+  verifyBtn.addEventListener('click', () => {
+    const enteredEmail = emailInput.value.trim().toLowerCase();
+    
+    // Get the user data from localStorage (saved by your register.js)
+    const storedUser = JSON.parse(localStorage.getItem('reenUser'));
+    
+    if (storedUser && storedUser.email.toLowerCase() === enteredEmail) {
+      // Success! Hide error, hide step 1, show step 2
+      emailError.classList.add('hidden');
+      step1.classList.add('hidden');
+      step2.classList.remove('hidden');
+    } else {
+      // Fail! Show error
+      emailError.classList.remove('hidden');
+      emailError.textContent = "The email entered is incorrect. Please try again.";
+    }
+  });
+}
+
+// 4. Save New Password (Finish)
+if (savePwdBtn) {
+  savePwdBtn.addEventListener('click', () => {
+    const newPwd = newPwdInput.value;
+    const confirmPwd = confirmPwdInput.value;
+    
+    // Check if empty
+    if (!newPwd || !confirmPwd) {
+      pwdError.textContent = "Please fill in both password fields.";
+      pwdError.classList.remove('hidden');
+      return;
+    }
+
+    // Check if passwords match
+    if (newPwd !== confirmPwd) {
+      pwdError.textContent = "Passwords do not match.";
+      pwdError.classList.remove('hidden');
+      return;
+    }
+
+    // Passwords match! Update the local storage
+    const storedUser = JSON.parse(localStorage.getItem('reenUser'));
+    if (storedUser) {
+      storedUser.password = newPwd; // Update password
+      localStorage.setItem('reenUser', JSON.stringify(storedUser)); // Save back
+      
+      // Close modal and show success alert
+      resetModal.classList.add('hidden');
+      
+      // Optional: Delay the alert slightly so the modal closes smoothly first
+      setTimeout(() => {
+        alert("Your password has been successfully updated!");
+      }, 300);
+    }
+  });
+}
+// 5. Toggle Password Visibility
+const togglePwdBtns = document.querySelectorAll('.toggle-pwd-btn');
+
+togglePwdBtns.forEach(btn => {
+  btn.addEventListener('click', () => {
+    // Get the ID of the input this button controls
+    const targetId = btn.getAttribute('data-target');
+    const targetInput = document.getElementById(targetId);
+    const icon = btn.querySelector('i');
+    
+    // Toggle the type and the icon
+    if (targetInput.type === 'password') {
+      targetInput.type = 'text';
+      icon.setAttribute('data-lucide', 'eye-off');
+    } else {
+      targetInput.type = 'password';
+      icon.setAttribute('data-lucide', 'eye');
+    }
+    
+    // Re-render the Lucide icons so the change shows up
+    if (typeof lucide !== 'undefined') {
+      lucide.createIcons();
+    }
+  });
+});
