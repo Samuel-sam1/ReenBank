@@ -168,7 +168,22 @@
       </div>
       <p id="modal-subtitle" class="text-gray-500 text-sm mb-6">Enter the amount you wish to proceed with.</p>
      <!-- 1. Amount Input -->
+     <!-- 1. Payment Method Dropdown -->
       <div class="mb-4">
+        <label for="tx-payment-method" class="block text-sm font-medium text-gray-700 mb-2">Select Payment Method</label>
+        <div class="relative">
+          <select id="tx-payment-method" class="w-full pl-4 pr-10 py-4 rounded-xl bg-gray-50 border border-gray-200 outline-none focus:ring-2 focus:ring-[#19B66B] font-medium text-gray-900 appearance-none cursor-pointer">
+            <option value="" disabled selected>Choose payment method</option>
+            <option value="Direct Pay">Direct Pay</option>
+            <option value="Credit Card">Credit Card</option>
+          </select>
+          <!-- Custom Dropdown Arrow -->
+          <i data-lucide="chevron-down" class="absolute right-4 top-1/2 -translate-y-1/2 text-gray-400 w-5 h-5 pointer-events-none"></i>
+        </div>
+      </div>
+
+      <!-- 2. Amount Input -->
+      <div class="mb-8">
         <label for="tx-amount" class="block text-sm font-medium text-gray-700 mb-2">Amount</label>
         <div class="relative">
           <span class="absolute left-4 top-1/2 -translate-y-1/2 text-gray-500 font-bold text-lg">₦</span>
@@ -176,38 +191,7 @@
         </div>
       </div>
 
-      <!-- 2. Bank Dropdown -->
-      <div class="mb-4">
-        <label for="tx-bank" class="block text-sm font-medium text-gray-700 mb-2">Select Bank</label>
-        <div class="relative">
-          <select id="tx-bank" class="w-full pl-11 pr-10 py-4 rounded-xl bg-gray-50 border border-gray-200 outline-none focus:ring-2 focus:ring-[#19B66B] font-medium text-gray-900 appearance-none cursor-pointer">
-            <option value="" disabled selected>Choose destination bank</option>
-            <option value="reen">Reen Bank</option>
-            <option value="access">Access Bank</option>
-            <option value="firstbank">First Bank of Nigeria</option>
-            <option value="gtb">Guaranty Trust Bank (GTB)</option>
-            <option value="uba">United Bank for Africa (UBA)</option>
-            <option value="zenith">Zenith Bank</option>
-          </select>
-          <!-- Custom Dropdown Arrow -->
-        </div>
-      </div>
-
-      <!-- 3. Account Number Input -->
-      <div class="mb-4">
-        <label for="tx-account-num" class="block text-sm font-medium text-gray-700 mb-2">Account Number</label>
-        <div class="relative">
-          <input type="number" id="tx-account-num" placeholder="0123456789" class="w-full pl-11 pr-4 py-4 rounded-xl bg-gray-50 border border-gray-200 outline-none focus:ring-2 focus:ring-[#19B66B] font-medium text-gray-900">
-        </div>
-      </div>
-
-      <!-- 4. Account Name Input -->
-      <div class="mb-8">
-        <label for="tx-account-name" class="block text-sm font-medium text-gray-700 mb-2">Account Name</label>
-        <div class="relative">
-          <input type="text" id="tx-account-name" placeholder="e.g. Maureen Oguche" class="w-full pl-11 pr-4 py-4 rounded-xl bg-gray-50 border border-gray-200 outline-none focus:ring-2 focus:ring-[#19B66B] font-medium text-gray-900">
-        </div>
-      </div>
+      <!-- Action Buttons -->
       <div class="flex gap-4">
         <button onclick="closeTxModal()" class="cursor-pointer flex-1 bg-gray-100 text-gray-600 font-bold py-3.5 rounded-xl hover:bg-gray-200 transition-colors">Cancel</button>
         <button onclick="processTransaction()" id="modal-submit-btn" class="cursor-pointer flex-1 bg-[#19B66B] text-white font-bold py-3.5 rounded-xl hover:bg-green-600 transition-colors">Proceed</button>
