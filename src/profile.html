@@ -146,9 +146,17 @@
             <p class="text-gray-900 font-bold">+234 803 041 1314</p>
           </div>
 
-          <div class="border-b border-gray-100 pb-6">
-            <p class="text-[#19B66B] text-xs font-semibold mb-1">Gender</p>
-            <p class="text-gray-900 font-bold">Male</p>
+         <div class="border-b border-gray-100 pb-6">
+            <label for="profile-gender" class="block text-[#19B66B] text-xs font-semibold mb-2">Gender</label>
+            <div class="relative">
+              <select id="profile-gender" class="w-full pl-4 pr-10 py-3 rounded-xl bg-gray-50 border border-gray-200 outline-none focus:ring-2 focus:ring-[#19B66B] font-bold text-gray-900 appearance-none cursor-pointer">
+                <option value="Male" selected>Male</option>
+                <option value="Female">Female</option>
+                <option value="Others">Others</option>
+              </select>
+              <!-- Custom Dropdown Arrow -->
+              <i data-lucide="chevron-down" class="absolute right-4 top-1/2 -translate-y-1/2 text-gray-400 w-5 h-5 pointer-events-none"></i>
+            </div>
           </div>
 
         <button id="reset-password-btn" class=" cursor-pointer w-full bg-[#19B66B] hover:bg-green-600 text-white font-bold py-4 rounded-xl transition-colors mt-4">

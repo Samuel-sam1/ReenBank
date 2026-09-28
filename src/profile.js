@@ -257,3 +257,26 @@ togglePwdBtns.forEach(btn => {
     }
   });
 });
+/* =========================================
+   GENDER DROPDOWN PERSISTENCE
+   ========================================= */
+document.addEventListener("DOMContentLoaded", () => {
+  const genderSelect = document.getElementById('profile-gender');
+
+  if (genderSelect) {
+    // 1. Load the saved gender from localStorage (if it exists)
+    const storedUser = JSON.parse(localStorage.getItem('reenUser'));
+    
+    if (storedUser && storedUser.gender) {
+      genderSelect.value = storedUser.gender;
+    }
+
+    // 2. Listen for changes and save to localStorage immediately
+    genderSelect.addEventListener('change', (event) => {
+      if (storedUser) {
+        storedUser.gender = event.target.value;
+        localStorage.setItem('reenUser', JSON.stringify(storedUser));
+      }
+    });
+  }
+});
