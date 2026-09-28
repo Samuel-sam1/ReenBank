@@ -1,7 +1,4 @@
-/* =========================================
-   REEN BANK - account.js
-   ========================================= */
-
+  //  REEN BANK - account.js
 // 1. Default State (Dynamic Array format)
 const defaultState = {
   accounts: [
@@ -11,12 +8,10 @@ const defaultState = {
   ],
   transactions: []
 };
-
 // 2. Load state from LocalStorage 
 let bankState;
 try {
   bankState = JSON.parse(localStorage.getItem('reenBankState')) || defaultState;
-  
   // Safety Check: If the old data structure exists (balances object instead of accounts array), reset it.
   if (!bankState.accounts || !Array.isArray(bankState.accounts)) {
     console.warn("Old data format detected. Resetting to default state.");
@@ -79,7 +74,6 @@ function renderAccounts() {
       </div>
     `;
   });
-
   // Always append the "Add Account" button at the end
   html += `
     <div onclick="openAddAccountModal()" class="bg-[#F8F9FA] rounded-2xl p-6 shadow-sm flex flex-col justify-center h-48 border border-gray-100 cursor-pointer hover:bg-gray-50 transition-colors">

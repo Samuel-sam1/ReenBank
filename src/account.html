@@ -167,9 +167,46 @@
         </button>
       </div>
       <p id="modal-subtitle" class="text-gray-500 text-sm mb-6">Enter the amount you wish to proceed with.</p>
-      <div class="mb-6 relative">
-        <span class="absolute left-4 top-1/2 -translate-y-1/2 text-gray-500 font-bold text-lg">₦</span>
-        <input type="number" id="tx-amount" placeholder="0.00" class="w-full pl-10 pr-4 py-4 rounded-xl bg-gray-50 border border-gray-200 outline-none focus:ring-2 focus:ring-[#19B66B] text-xl font-bold text-gray-900">
+     <!-- 1. Amount Input -->
+      <div class="mb-4">
+        <label for="tx-amount" class="block text-sm font-medium text-gray-700 mb-2">Amount</label>
+        <div class="relative">
+          <span class="absolute left-4 top-1/2 -translate-y-1/2 text-gray-500 font-bold text-lg">₦</span>
+          <input type="number" id="tx-amount" placeholder="0.00" class="w-full pl-10 pr-4 py-4 rounded-xl bg-gray-50 border border-gray-200 outline-none focus:ring-2 focus:ring-[#19B66B] text-xl font-bold text-gray-900">
+        </div>
+      </div>
+
+      <!-- 2. Bank Dropdown -->
+      <div class="mb-4">
+        <label for="tx-bank" class="block text-sm font-medium text-gray-700 mb-2">Select Bank</label>
+        <div class="relative">
+          <select id="tx-bank" class="w-full pl-11 pr-10 py-4 rounded-xl bg-gray-50 border border-gray-200 outline-none focus:ring-2 focus:ring-[#19B66B] font-medium text-gray-900 appearance-none cursor-pointer">
+            <option value="" disabled selected>Choose destination bank</option>
+            <option value="reen">Reen Bank</option>
+            <option value="access">Access Bank</option>
+            <option value="firstbank">First Bank of Nigeria</option>
+            <option value="gtb">Guaranty Trust Bank (GTB)</option>
+            <option value="uba">United Bank for Africa (UBA)</option>
+            <option value="zenith">Zenith Bank</option>
+          </select>
+          <!-- Custom Dropdown Arrow -->
+        </div>
+      </div>
+
+      <!-- 3. Account Number Input -->
+      <div class="mb-4">
+        <label for="tx-account-num" class="block text-sm font-medium text-gray-700 mb-2">Account Number</label>
+        <div class="relative">
+          <input type="number" id="tx-account-num" placeholder="0123456789" class="w-full pl-11 pr-4 py-4 rounded-xl bg-gray-50 border border-gray-200 outline-none focus:ring-2 focus:ring-[#19B66B] font-medium text-gray-900">
+        </div>
+      </div>
+
+      <!-- 4. Account Name Input -->
+      <div class="mb-8">
+        <label for="tx-account-name" class="block text-sm font-medium text-gray-700 mb-2">Account Name</label>
+        <div class="relative">
+          <input type="text" id="tx-account-name" placeholder="e.g. Maureen Oguche" class="w-full pl-11 pr-4 py-4 rounded-xl bg-gray-50 border border-gray-200 outline-none focus:ring-2 focus:ring-[#19B66B] font-medium text-gray-900">
+        </div>
       </div>
       <div class="flex gap-4">
         <button onclick="closeTxModal()" class="cursor-pointer flex-1 bg-gray-100 text-gray-600 font-bold py-3.5 rounded-xl hover:bg-gray-200 transition-colors">Cancel</button>
@@ -193,7 +230,7 @@
       </div>
       <div class="flex gap-4">
         <button onclick="closeAddAccountModal()" class="cursor-pointer flex-1 bg-gray-100 text-gray-600 font-bold py-3.5 rounded-xl hover:bg-gray-200 transition-colors">Cancel</button>
-        <button onclick="submitNewAccount()" class="cursor-pointer flex-1 bg-[#5645A5] text-white font-bold py-3.5 rounded-xl hover:bg-[#433580] transition-colors">Create Account</button>
+        <button onclick="submitNewAccount()" class="cursor-pointer flex-1 bg-[#19B66B] text-white font-bold py-3.5 rounded-xl hover:bg-[#433580] transition-colors">Create Account</button>
       </div>
     </div>
   </div>

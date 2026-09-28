@@ -1,6 +1,4 @@
-/* =========================================
-   REEN BANK - overview.js
-   ========================================= */
+  //  REEN BANK - overview.js
 
 // 1. Setup Default State structure (Must mirror account.js)
 const defaultState = {
@@ -12,20 +10,16 @@ const defaultState = {
   transactions: [],
   globalHidden: false // Specifically for the Overview master balances
 };
-
 // 2. Load state from LocalStorage
 let bankState;
 try {
   bankState = JSON.parse(localStorage.getItem('reenBankState')) || defaultState;
-  
   // Migration check in case missing elements
   if (!bankState.accounts) bankState = defaultState;
   if (bankState.globalHidden === undefined) bankState.globalHidden = false;
-  
 } catch (e) {
   bankState = defaultState;
 }
-
 // Helper: Format Currency
 function formatCurrency(amount) {
   return '₦ ' + amount.toLocaleString('en-NG', { minimumFractionDigits: 2, maximumFractionDigits: 2 });
