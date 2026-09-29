@@ -414,3 +414,18 @@ window.processTransaction = function() {
   document.getElementById('transactionModal').classList.add('hidden');
   window.location.reload();
 };
+
+window.toggleTxCreditCardFields = function() {
+  const selectedMethod = document.querySelector('input[name="tx-payment-method"]:checked');
+  const ccDetails = document.getElementById('tx-credit-card-details');
+  
+  if (selectedMethod && selectedMethod.value === 'Credit Card') {
+    // Show the card details
+    ccDetails.classList.remove('hidden');
+    // Re-render Lucide icons just in case
+    if (typeof lucide !== 'undefined') lucide.createIcons();
+  } else {
+    // Hide the card details
+    ccDetails.classList.add('hidden');
+  }
+};

@@ -558,3 +558,18 @@ window.submitNewAccount = function() {
     if (typeof lucide !== 'undefined') lucide.createIcons();
   }
 };
+// Toggles the credit card fields in the Fund Modal
+window.toggleCreditCardFields = function() {
+  const selectedMethod = document.querySelector('input[name="fund-payment-method"]:checked');
+  const ccDetails = document.getElementById('credit-card-details');
+  
+  if (selectedMethod && selectedMethod.value === 'Credit Card') {
+    // Show the card details
+    ccDetails.classList.remove('hidden');
+    // Re-render Lucide icons just in case
+    if (typeof lucide !== 'undefined') lucide.createIcons();
+  } else {
+    // Hide the card details
+    ccDetails.classList.add('hidden');
+  }
+};

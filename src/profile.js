@@ -292,3 +292,127 @@ document.addEventListener("DOMContentLoaded", () => {
     });
   }
 });
+/* =========================================
+   EDIT EMAIL LOGIC (PERSIST TO LOCALSTORAGE)
+   ========================================= */
+document.addEventListener("DOMContentLoaded", () => {
+  const editBtn = document.getElementById('edit-email-btn');
+  const saveBtn = document.getElementById('save-email-btn');
+  const cancelBtn = document.getElementById('cancel-email-btn');
+
+  const viewContainer = document.getElementById('email-view-container');
+  const editContainer = document.getElementById('email-edit-container');
+
+  const emailDisplay = document.getElementById('profile-email-main');
+  const emailInput = document.getElementById('profile-email-input');
+
+  // 1. Enter Edit Mode
+  if (editBtn) {
+    editBtn.addEventListener('click', () => {
+      const storedUser = JSON.parse(localStorage.getItem('reenUser'));
+      if (storedUser) {
+        emailInput.value = storedUser.email || '';
+      }
+
+      viewContainer.classList.add('hidden');
+      editBtn.classList.add('hidden');
+      editContainer.classList.remove('hidden');
+      emailInput.focus();
+    });
+  }
+
+  // 2. Cancel Edit Mode
+  if (cancelBtn) {
+    cancelBtn.addEventListener('click', () => {
+      editContainer.classList.add('hidden');
+      viewContainer.classList.remove('hidden');
+      editBtn.classList.remove('hidden');
+    });
+  }
+
+  // 3. Save New Email to localStorage
+  if (saveBtn) {
+    saveBtn.addEventListener('click', () => {
+      const newEmail = emailInput.value.trim().toLowerCase();
+
+      // Basic email validation
+      const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+      if (!newEmail || !emailRegex.test(newEmail)) {
+        alert("Please enter a valid email address.");
+        return;
+      }
+
+      const storedUser = JSON.parse(localStorage.getItem('reenUser'));
+      if (storedUser) {
+        // Update user object and save back to localStorage
+        storedUser.email = newEmail;
+        localStorage.setItem('reenUser', JSON.stringify(storedUser));
+
+        // Update the visible UI immediately
+        if (emailDisplay) emailDisplay.textContent = newEmail;
+
+        // Switch back to view mode
+        editContainer.classList.add('hidden');
+        viewContainer.classList.remove('hidden');
+        editBtn.classList.remove('hidden');
+      }
+    });
+  }
+});
+/* =========================================
+   AVATAR UPLOAD & PERSISTENCE (profile.js)
+   ========================================= */
+
+// 1. Load saved picture on page load
+function loadUserAvatar() {
+  const storedUser = JSON.parse(localStorage.getItem('reenUser'));
+  if (storedUser && storedUser.avatar) {
+    const avatarImg = document.getElementById('profile-avatar-img');
+    if (avatarImg) avatarImg.src = storedUser.avatar;
+
+    // Also update any navbar/header profile image
+    document.querySelectorAll('.user-avatar-img').forEach(img => {
+      img.src = storedUser.avatar;
+    });
+  }
+}
+
+// 2. Handle File Input Selection
+document.addEventListener("DOMContentLoaded", () => {
+  loadUserAvatar();
+
+  const fileInput = document.getElementById('avatar-upload-input');
+  if (fileInput) {
+    fileInput.addEventListener('change', (e) => {
+      const file = e.target.files[0];
+      if (!file) return;
+
+      // Check file size (keep under 2MB for localStorage limits)
+      if (file.size > 2 * 1024 * 1024) {
+        alert("Image must be smaller than 2MB.");
+        return;
+      }
+
+      const reader = new FileReader();
+      reader.onload = function(event) {
+        const base64Image = event.target.result;
+
+        // Save to reenUser in localStorage
+        const storedUser = JSON.parse(localStorage.getItem('reenUser')) || {};
+        storedUser.avatar = base64Image;
+        localStorage.setItem('reenUser', JSON.stringify(storedUser));
+
+        // Update profile picture instantly
+        const avatarImg = document.getElementById('profile-avatar-img');
+        if (avatarImg) avatarImg.src = base64Image;
+
+        // Update header avatars on this page
+        document.querySelectorAll('.user-avatar-img').forEach(img => {
+          img.src = base64Image;
+        });
+      };
+
+      reader.readAsDataURL(file);
+    });
+  }
+});

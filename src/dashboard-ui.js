@@ -173,3 +173,11 @@ document.addEventListener("DOMContentLoaded", () => {
   }
 
 });
+document.addEventListener("DOMContentLoaded", () => {
+  const storedUser = JSON.parse(localStorage.getItem('reenUser'));
+  if (storedUser && storedUser.avatar) {
+    document.querySelectorAll('.user-avatar-img').forEach(img => {
+      img.src = storedUser.avatar;
+    });
+  }
+});

@@ -115,7 +115,7 @@
   </div>
 
  <a href="profile.html">
-    <img src="https://i.pravatar.cc/150?img=12" alt="Profile" class="w-10 h-10 rounded-full object-cover border border-gray-200 hidden sm:block">
+    <img src="https://i.pravatar.cc/150?img=12" alt="Profile" class="user-avatar-img w-10 h-10 rounded-full object-cover border border-gray-200 hidden sm:block">
 </a>
 </div>
       </div>
@@ -313,30 +313,105 @@
 
   <!-- 3. Transaction Modal (Needed so the "Fund" button on the Success modal works) -->
  <!-- Transaction Modal (Needed in Overview for the Fund Button to work) -->
-  <div id="transactionModal" class="fixed inset-0 bg-black/60 z-[120] hidden flex items-center justify-center p-4 backdrop-blur-sm">
-    <div class="bg-white rounded-2xl p-8 w-full max-w-md shadow-2xl transform transition-all">
-      <div class="flex justify-between items-center mb-6">
-        <h3 id="modal-title" class="text-2xl font-bold text-gray-900">Transaction</h3>
-        <button onclick="closeTxModal()" class="text-gray-400 hover:text-gray-700 focus:outline-none">
-          <i data-lucide="x" class="w-6 h-6"></i>
-        </button>
-      </div>
-      <p id="modal-subtitle" class="text-gray-500 text-sm mb-6">Enter details to proceed.</p>
-      
-      <div class="mb-8">
-        <label for="tx-amount" class="block text-sm font-medium text-gray-700 mb-2">Amount</label>
-        <div class="relative">
-          <span class="absolute left-4 top-1/2 -translate-y-1/2 text-gray-500 font-bold text-lg">₦</span>
-          <input type="number" id="tx-amount" placeholder="0.00" class="w-full pl-10 pr-4 py-4 rounded-xl bg-gray-50 border border-gray-200 outline-none focus:ring-2 focus:ring-[#19B66B] text-xl font-bold text-gray-900">
-        </div>
-      </div>
-      
-      <div class="flex gap-4">
-        <button onclick="closeTxModal()" class="cursor-pointer flex-1 bg-gray-100 text-gray-600 font-bold py-3.5 rounded-xl hover:bg-gray-200 transition-colors">Cancel</button>
-        <button onclick="processTransaction()" id="modal-submit-btn" class="cursor-pointer flex-1 bg-[#19B66B] text-white font-bold py-3.5 rounded-xl hover:bg-green-600 transition-colors">Proceed</button>
+ <div id="transactionModal" class="fixed inset-0 bg-black/60 z-[120] hidden flex items-center justify-center p-4 backdrop-blur-sm">
+  <div class="bg-white rounded-2xl p-8 w-full max-w-md shadow-2xl transform transition-all max-h-[90vh] overflow-y-auto">
+    <div class="flex justify-between items-center mb-6">
+      <h3 id="modal-title" class="text-2xl font-bold text-gray-900">Transaction</h3>
+      <button onclick="closeTxModal()" class="text-gray-400 hover:text-gray-700 focus:outline-none">
+        <i data-lucide="x" class="w-6 h-6"></i>
+      </button>
+    </div>
+    <p id="modal-subtitle" class="text-gray-500 text-sm mb-6">Enter details to proceed.</p>
+    
+    <!-- ==========================================
+         PAYMENT METHOD (Added)
+    ========================================== -->
+    <div class="mb-6">
+      <label class="block text-sm font-medium text-gray-700 mb-3">
+        Select Payment Method
+      </label>
+      <div class="flex items-center justify-center gap-4">
+        <!-- Direct Pay Option -->
+        <label class="flex-1 flex items-center justify-center gap-2 p-4 rounded-xl border border-gray-200 bg-gray-50 cursor-pointer hover:bg-gray-100 transition-colors">
+          <input 
+            type="radio" 
+            name="tx-payment-method" 
+            value="Direct Pay" 
+            checked 
+            onchange="toggleTxCreditCardFields()"
+            class="w-4 h-4 accent-[#19B66B] cursor-pointer"
+          >
+          <span class="font-medium text-gray-900 text-sm">Direct Pay</span>
+        </label>
+        
+        <!-- Credit Card Option -->
+        <label class="flex-1 flex items-center justify-center gap-2 p-4 rounded-xl border border-gray-200 bg-gray-50 cursor-pointer hover:bg-gray-100 transition-colors">
+          <input 
+            type="radio" 
+            name="tx-payment-method" 
+            value="Credit Card" 
+            onchange="toggleTxCreditCardFields()"
+            class="w-4 h-4 accent-[#19B66B] cursor-pointer"
+          >
+          <span class="font-medium text-gray-900 text-sm">Credit Card</span>
+        </label>
       </div>
     </div>
+
+    <!-- ==========================================
+         CREDIT CARD DETAILS (Hidden by default)
+    ========================================== -->
+    <div id="tx-credit-card-details" class="hidden mb-6 space-y-4">
+      
+      <!-- Card Number (100% width) -->
+      <div>
+        <label for="tx-cc-number" class="block text-sm font-medium text-gray-700 mb-2">Card Number</label>
+        <div class="relative">
+          <i data-lucide="credit-card" class="absolute left-4 top-1/2 -translate-y-1/2 text-gray-400 w-5 h-5"></i>
+          <input type="text" id="tx-cc-number" placeholder="0000 0000 0000 0000" class="w-full pl-11 pr-4 py-4 rounded-xl bg-gray-50 border border-gray-200 outline-none focus:ring-2 focus:ring-[#19B66B] font-medium text-gray-900">
+        </div>
+      </div>
+
+      <!-- Card Holder Name (100% width) -->
+      <div>
+        <label for="tx-cc-name" class="block text-sm font-medium text-gray-700 mb-2">Card Holder Name</label>
+        <div class="relative">
+          <i data-lucide="user" class="absolute left-4 top-1/2 -translate-y-1/2 text-gray-400 w-5 h-5"></i>
+          <input type="text" id="tx-cc-name" placeholder="e.g. Maureen Oguche" class="w-full pl-11 pr-4 py-4 rounded-xl bg-gray-50 border border-gray-200 outline-none focus:ring-2 focus:ring-[#19B66B] font-medium text-gray-900">
+        </div>
+      </div>
+
+      <!-- Expiry Date & CVC (50% / 50% split) -->
+      <div class="flex gap-4">
+        <!-- Expiry -->
+        <div class="flex-1">
+          <label for="tx-cc-expiry" class="block text-sm font-medium text-gray-700 mb-2">Expiry Date</label>
+          <input type="text" id="tx-cc-expiry" placeholder="MM/YY" class="w-full px-4 py-4 rounded-xl bg-gray-50 border border-gray-200 outline-none focus:ring-2 focus:ring-[#19B66B] font-medium text-gray-900 text-center">
+        </div>
+        <!-- CVC -->
+        <div class="flex-1">
+          <label for="tx-cc-cvc" class="block text-sm font-medium text-gray-700 mb-2">CVC</label>
+          <input type="text" id="tx-cc-cvc" placeholder="123" class="w-full px-4 py-4 rounded-xl bg-gray-50 border border-gray-200 outline-none focus:ring-2 focus:ring-[#19B66B] font-medium text-gray-900 text-center">
+        </div>
+      </div>
+
+    </div>
+
+    <!-- Amount -->
+    <div class="mb-8">
+      <label for="tx-amount" class="block text-sm font-medium text-gray-700 mb-2">Amount</label>
+      <div class="relative">
+        <span class="absolute left-4 top-1/2 -translate-y-1/2 text-gray-500 font-bold text-lg">₦</span>
+        <input type="number" id="tx-amount" placeholder="0.00" class="w-full pl-10 pr-4 py-4 rounded-xl bg-gray-50 border border-gray-200 outline-none focus:ring-2 focus:ring-[#19B66B] text-xl font-bold text-gray-900">
+      </div>
+    </div>
+    
+    <div class="flex gap-4">
+      <button onclick="closeTxModal()" class="cursor-pointer flex-1 bg-gray-100 text-gray-600 font-bold py-3.5 rounded-xl hover:bg-gray-200 transition-colors">Cancel</button>
+      <button onclick="processTransaction()" id="modal-submit-btn" class="cursor-pointer flex-1 bg-[#19B66B] text-white font-bold py-3.5 rounded-xl hover:bg-green-600 transition-colors">Proceed</button>
+    </div>
   </div>
+</div>
   <!-- LOGOUT MODAL -->
 <div id="logout-modal" class="fixed inset-0 bg-black/60 z-[100] hidden flex items-center justify-center p-4 backdrop-blur-sm">
   <div class="bg-white rounded-2xl p-8 w-full max-w-sm shadow-2xl transform transition-all text-center">
