@@ -20,35 +20,45 @@
   </style>
 <body class="bg-white text-gray-900 antialiased">
        <!-- HEADER -->
-  <header id="site-header" class="absolute top-0 left-0 right-0 z-50">
+<header id="site-header" class="absolute top-0 left-0 right-0 z-50">
     <div class="max-w-7xl mx-auto px-5 sm:px-8 lg:px-10">
       <nav class="h-20 flex items-center justify-between" aria-label="Main navigation">
-        <!-- LOGO -->
-        <a id="logo-link" href="index.html" class="flex items-center gap-2">
-         
-         <img src="assets/logo.png" alt=""  class="w-36">
-        </a>
-        <!-- DESKTOP NAVIGATION -->
-        <div id="desktop-navigation" class="hidden md:flex items-center gap-8">
-          <a id="nav-about" href="#about" class="text-xs font-medium text-black hover:text-reen-green transition">
-            About
+        
+        <!-- LEFT SIDE: LOGO & DESKTOP NAVIGATION -->
+        <div class="flex items-center gap-10">
+          <!-- LOGO -->
+          <a id="logo-link" href="index.html" class="flex items-center gap-2 shrink-0">
+            <img src="assets/logo.png" alt="Reen Bank" class="w-36">
           </a>
-          <a id="nav-contact" href="#footer" class="text-xs font-medium text-black hover:text-reen-green transition">
-            Contact Us
-          </a>
+          
+          <!-- DESKTOP NAVIGATION -->
+          <div id="desktop-navigation" class="hidden md:flex items-center gap-8">
+            <a id="nav-about" href="#about" class="text-xs font-medium text-black hover:text-[#19B66B] transition-colors">
+              About
+            </a>
+            <a id="nav-contact" href="#footer" class="text-xs font-medium text-black hover:text-[#19B66B] transition-colors">
+              Contact Us
+            </a>
+          </div>
         </div>
-        <!-- DESKTOP ACTIONS -->
-        <div id="desktop-actions" class="hidden md:flex items-center gap-3">
-          <a id="login-button" href="login.html" class="px-5 py-2 rounded-md border border-reen-green text-reen-green text-xs font-medium hover:bg-reen-green hover:text-white transition">
-            Login
-          </a>
+
+        <!-- RIGHT SIDE: DESKTOP ACTIONS & MOBILE MENU -->
+        <div class="flex items-center gap-3">
+          <!-- DESKTOP ACTIONS -->
+          <div id="desktop-actions" class="hidden md:flex items-center gap-3">
+            <a id="login-button" href="login.html" class="px-5 py-2 rounded-md border border-[#19B66B] text-[#19B66B] text-xs font-bold hover:bg-[#19B66B] hover:text-white transition-colors">
+              Login
+            </a>
+          </div>
+          
+          <!-- MOBILE MENU BUTTON -->
+          <button id="mobile-menu-button" type="button" aria-label="Open menu" aria-expanded="false" class="md:hidden w-10 h-10 flex items-center justify-center rounded-lg hover:bg-black/5 transition">
+            <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.8" d="M4 6h16M4 12h16M4 18h16"/>
+            </svg>
+          </button>
         </div>
-        <!-- MOBILE MENU BUTTON -->
-        <button id="mobile-menu-button" type="button" aria-label="Open menu" aria-expanded="false" class="md:hidden w-10 h-10 flex items-center justify-center rounded-lg hover:bg-white/50 transition">
-          <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.8" d="M4 6h16M4 12h16M4 18h16"/>
-          </svg>
-        </button>
+
       </nav>
     </div>
   </header>
@@ -96,9 +106,9 @@
           <div id="hero-content" class="max-w-xl"
           >
             <p
-              class="text-xs sm:text-sm font-semibold text-reen-green mb-4"
+              class="text-xs sm:text-sm font-bold text-reen-green mb-4"
             >
-              Bank Smarter
+              Reen Bank
             </p>
             <h1 id="hero-title" class="text-4xl sm:text-5xl lg:text-6xl font-bold leading-[1.05] tracking-tight text-black"
             >
@@ -116,7 +126,7 @@
               <a id="hero-get-started" href="register.html" class="inline-flex items-center justify-center px-6 py-3 rounded-md bg-reen-green text-white text-sm font-semibold hover:bg-green-600 transition">
                 Get started
               </a>
-              <a id="hero-learn-more" href="#faqs" class="inline-flex items-center justify-center px-6 py-3 rounded-md border border-reen-green text-reen-green text-sm font-semibold hover:bg-white transition">
+              <a id="hero-learn-more" href="#faqs" class="inline-flex items-center justify-center px-6 py-3 rounded-md border border-[#19B66B] text-[#19B66B] text-sm font-semibold hover:bg-white transition">
                 Learn more
               </a>
             </div>

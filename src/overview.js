@@ -208,3 +208,209 @@ window.addEventListener('DOMContentLoaded', () => {
   renderAccounts();
   renderTransactions();
 });
+
+/* =========================================================
+   ACCOUNT CREATION & SUCCESS MODAL LOGIC (OVERVIEW.JS)
+   ========================================================= */
+
+// 1. Handle Account Creation
+window.submitNewAccount = function() {
+  const nameInput = document.getElementById('new-account-name').value.trim();
+  
+  if (!nameInput) {
+    alert("Please enter a name for the new account.");
+    return;
+  }
+
+  // Create the new account object
+  const newAccountId = 'acc_' + Date.now();
+  const newAccount = {
+    id: newAccountId,
+    name: nameInput,
+    balance: 0, 
+    hidden: false,
+    theme: 'border-[#19B66B]' // Gives new accounts a green border
+  };
+
+  // Save to the global bankState (which is loaded by account.js)
+  bankState.accounts.push(newAccount);
+  localStorage.setItem('reenBankState', JSON.stringify(bankState));
+  
+  // Close the Add Account Modal and refresh the cards
+  document.getElementById('addAccountModal').classList.add('hidden');
+  if (typeof renderAccounts === 'function') renderAccounts();
+
+  // Trigger the Success Modal
+  showAccountSuccess(nameInput, newAccountId);
+};
+
+// 2. Control the Success Modal
+window.showAccountSuccess = function(accountName, accountId) {
+  const successModal = document.getElementById('successAccountModal');
+  const successMsg = document.getElementById('success-account-msg');
+  const fundBtn = document.getElementById('success-fund-btn');
+
+  if (successModal && successMsg) {
+    // Inject the dynamic success message
+    successMsg.innerHTML = `<span class="text-[#19B66B] font-bold">${accountName}</span> has been created successfully.`;
+    
+    // Program the Fund button
+    if (fundBtn) {
+      fundBtn.onclick = function() {
+        closeSuccessModal(); // Close the success checkmark modal
+        
+        // Call the Fund modal logic that lives inside account.js!
+        if (typeof openTxModal === 'function') {
+          openTxModal(accountId, 'fund');
+        }
+      };
+    }
+    
+    // Show the modal
+    successModal.classList.remove('hidden');
+    if (typeof lucide !== 'undefined') lucide.createIcons();
+  }
+};
+
+// 3. Control the "Go Back" Button
+window.closeSuccessModal = function() {
+  const modal = document.getElementById('successAccountModal');
+  if (modal) {
+    modal.classList.add('hidden');
+  }
+};
+/* =========================================================
+   ACCOUNT CREATION, SUCCESS & FUNDING LOGIC (OVERVIEW.JS)
+   ========================================================= */
+
+// 1. Create the Account
+window.submitNewAccount = function() {
+  const nameInput = document.getElementById('new-account-name').value.trim();
+  
+  if (!nameInput) {
+    alert("Please enter a name for the new account.");
+    return;
+  }
+
+  // Pull fresh state from local storage directly
+  let state = JSON.parse(localStorage.getItem('reenBankState')) || { accounts: [], transactions: [] };
+
+  const newAccountId = 'acc_' + Date.now();
+  const newAccount = {
+    id: newAccountId,
+    name: nameInput,
+    balance: 0, 
+    hidden: false,
+    theme: 'border-[#19B66B]'
+  };
+
+  // Save to database
+  state.accounts.push(newAccount);
+  localStorage.setItem('reenBankState', JSON.stringify(state));
+  
+  // Close Add Account Modal
+  const addModal = document.getElementById('addAccountModal');
+  if (addModal) addModal.classList.add('hidden');
+
+  // Show Success Modal
+  const successModal = document.getElementById('successAccountModal');
+  const successMsg = document.getElementById('success-account-msg');
+  const fundBtn = document.getElementById('success-fund-btn');
+
+  if (successModal && successMsg) {
+    successMsg.innerHTML = `<span class="text-[#19B66B] font-bold">${nameInput}</span> has been created successfully.`;
+    
+    // Connect the Fund Button
+    if (fundBtn) {
+      fundBtn.onclick = function() {
+        successModal.classList.add('hidden');
+        
+        // Memorize which account we are funding
+        window.currentActiveAccount = newAccountId;
+        
+        // Open the Transaction Modal
+        const txModal = document.getElementById('transactionModal');
+        const txTitle = document.getElementById('modal-title');
+        const txInput = document.getElementById('tx-amount');
+        
+        if (txModal && txTitle && txInput) {
+          txInput.value = ''; 
+          txTitle.textContent = `Fund ${nameInput}`;
+          txModal.classList.remove('hidden');
+          setTimeout(() => txInput.focus(), 100);
+        }
+      };
+    }
+    successModal.classList.remove('hidden');
+    if (typeof lucide !== 'undefined') lucide.createIcons();
+  }
+};
+
+// 2. Close Success Modal & Refresh
+window.closeSuccessModal = function() {
+  const modal = document.getElementById('successAccountModal');
+  if (modal) modal.classList.add('hidden');
+  
+  // Reload so the Overview dashboard shows the new account totals
+  window.location.reload(); 
+};
+
+// 3. Close Transaction Modal & Refresh
+window.closeTxModal = function() {
+  const modal = document.getElementById('transactionModal');
+  if (modal) modal.classList.add('hidden');
+  
+  window.currentActiveAccount = '';
+  window.location.reload(); 
+};
+
+// 4. Process the Deposit (100% Independent of account.js)
+window.processTransaction = function() {
+  const amountInput = document.getElementById('tx-amount');
+  const amount = parseFloat(amountInput ? amountInput.value : 0);
+
+  if (isNaN(amount) || amount <= 0) {
+    alert("Please enter a valid amount greater than zero.");
+    return;
+  }
+
+  // Get database
+  let state = JSON.parse(localStorage.getItem('reenBankState'));
+  if (!state) return;
+
+  // Find the account we just created
+  const account = state.accounts.find(a => a.id === window.currentActiveAccount);
+  if (!account) {
+    alert("Account not found!");
+    return;
+  }
+
+  // Add the money
+  account.balance += amount;
+
+  // Create Date (e.g. 29.Sep.2026 - 14:30)
+  const now = new Date();
+  const monthNames = ["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"];
+  const dateStr = `${String(now.getDate()).padStart(2, '0')}.${monthNames[now.getMonth()]}.${now.getFullYear()} - ${String(now.getHours()).padStart(2, '0')}:${String(now.getMinutes()).padStart(2, '0')}`;
+
+  // Write Receipt
+  state.transactions.push({
+    id: Date.now(),
+    accountId: account.id,
+    type: 'credit',
+    amount: amount,
+    date: dateStr,
+    method: 'Self Deposit',
+    status: 'Completed'
+  });
+  
+  // Update Notification Badge
+  state.unreadNotis = (state.unreadNotis || 0) + 1;
+  
+  // Save everything back to Local Storage
+  localStorage.setItem('reenBankState', JSON.stringify(state));
+
+  // Hide modal and Refresh Page to update all balances instantly!
+  document.getElementById('transactionModal').classList.add('hidden');
+  window.location.reload();
+};

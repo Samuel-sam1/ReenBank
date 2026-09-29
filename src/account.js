@@ -68,12 +68,13 @@ function renderAccounts() {
           </button>
         </div>
         <div class="flex gap-3 mt-4">
-          <button onclick="openTxModal('${acc.id}', 'fund')" class="cursor-pointer flex-1 bg-[#19B66B] text-white text-sm font-medium py-2 rounded-lg hover:bg-green-600 transition-colors">Fund</button>
-          <button onclick="openTxModal('${acc.id}', 'withdraw')" class="cursor-pointer flex-1 bg-gray-200 text-gray-600 text-sm font-medium py-2 rounded-lg hover:bg-gray-300 transition-colors">Withdraw</button>
+          <button onclick="openFundModal('${acc.id}', 'fund')" class="cursor-pointer flex-1 bg-[#19B66B] text-white text-sm font-medium py-2 rounded-lg hover:bg-green-600 transition-colors">Fund</button>
+          <button onclick="openWithdrawModal('${acc.id}', 'withdraw')" class="cursor-pointer flex-1 bg-gray-200 text-gray-600 text-sm font-medium py-2 rounded-lg hover:bg-gray-300 transition-colors">Withdraw</button>
         </div>
       </div>
     `;
   });
+
   // Always append the "Add Account" button at the end
   html += `
     <div onclick="openAddAccountModal()" class="bg-[#F8F9FA] rounded-2xl p-6 shadow-sm flex flex-col justify-center h-48 border border-gray-100 cursor-pointer hover:bg-gray-50 transition-colors">
@@ -197,86 +198,271 @@ function submitNewAccount() {
   renderAccounts();
 }
 
-/* --- FUND/WITHDRAW MODAL LOGIC --- */
-function openTxModal(accountId, action) {
+// ==========================================
+// FUND / WITHDRAW MODALS
+// ==========================================
+
+// let currentActiveAccount = '';
+
+
+// ==========================================
+// FUND ACCOUNT
+// ==========================================
+
+function openFundModal(accountId) {
   currentActiveAccount = accountId;
-  currentActionType = action;
-  
+
   const account = bankState.accounts.find(a => a.id === accountId);
-  if (!account) return;
 
-  const modal = document.getElementById('transactionModal');
-  const title = document.getElementById('modal-title');
-  const submitBtn = document.getElementById('modal-submit-btn');
-  const input = document.getElementById('tx-amount');
-
-  input.value = ''; 
-  if (action === 'fund') {
-    title.textContent = `Fund ${account.name}`;
-    submitBtn.textContent = "Deposit";
-    submitBtn.className = "flex-1 bg-[#19B66B] text-white font-bold py-3.5 rounded-xl hover:bg-green-600 transition-colors";
-  } else {
-    title.textContent = `Withdraw from ${account.name}`;
-    submitBtn.textContent = "Withdraw";
-    submitBtn.className = "flex-1 bg-[#FA6E6E] text-white font-bold py-3.5 rounded-xl hover:bg-red-600 transition-colors";
-  }
-
-  modal.classList.remove('hidden');
-  setTimeout(() => input.focus(), 100);
-}
-
-function closeTxModal() {
-  document.getElementById('transactionModal').classList.add('hidden');
-  currentActiveAccount = '';
-  currentActionType = '';
-}
-
-function processTransaction() {
-  const amountInput = document.getElementById('tx-amount').value;
-  const amount = parseFloat(amountInput);
-
-  if (isNaN(amount) || amount <= 0) {
-    alert("Please enter a valid amount greater than zero.");
+  if (!account) {
+    console.error('Account not found');
     return;
   }
 
-  const account = bankState.accounts.find(a => a.id === currentActiveAccount);
+  const modal = document.getElementById('fundModal');
+  const accountName = document.getElementById('fund-account-name');
+  const amountInput = document.getElementById('fund-amount');
 
-  if (currentActionType === 'withdraw') {
-    if (amount > account.balance) {
-      alert(`Insufficient funds in ${account.name}. Your balance is ${formatCurrency(account.balance)}`);
-      return;
-    }
-    account.balance -= amount; // Deduct
-  } else if (currentActionType === 'fund') {
-    account.balance += amount; // Add
+  accountName.textContent = `Fund ${account.name}`;
+
+  amountInput.value = '';
+
+  modal.classList.remove('hidden');
+
+  setTimeout(() => {
+    amountInput.focus();
+  }, 100);
+}
+
+
+function closeFundModal() {
+  const modal = document.getElementById('fundModal');
+
+  if (modal) {
+    modal.classList.add('hidden');
   }
 
-  // Create transaction record
- const newTx = {
+  currentActiveAccount = '';
+}
+
+
+function processFunding() {
+  const amountInput = document.getElementById('fund-amount');
+  const amount = parseFloat(amountInput.value);
+
+  if (isNaN(amount) || amount <= 0) {
+    alert('Please enter a valid amount greater than zero.');
+    return;
+  }
+
+  const account = bankState.accounts.find(
+    a => a.id === currentActiveAccount
+  );
+
+  if (!account) {
+    alert('Account not found.');
+    return;
+  }
+
+  // Add money
+  account.balance += amount;
+
+
+  // Create transaction
+const newTx = {
     id: Date.now(),
-    accountId: account.id,
-    type: currentActionType === 'fund' ? 'credit' : 'debit',
+    accountId: account.id, 
+    type: 'credit', // or currentActionType === 'fund' ? 'credit' : 'debit'
     amount: amount,
-    date: getCurrentFormattedDate(),
-    method: currentActionType === 'fund' ? 'Self Deposit' : 'Self Withdrawal',
+    date: getCurrentFormattedDate(), // or your date variable
+    
+    // 👇 THIS IS THE NEW LINE 👇
+    method: document.querySelector('input[name="fund-payment-method"]:checked')?.value || 'Direct Pay',
+    
     status: 'Completed'
   };
 
   bankState.transactions.push(newTx);
-  
-  // ---> ADD THIS LINE TO INCREASE THE NOTIFICATION COUNTER <---
+
+
+  // Notification
   bankState.unreadNotis = (bankState.unreadNotis || 0) + 1;
 
-  localStorage.setItem('reenBankState', JSON.stringify(bankState));
 
-  closeTxModal();
-  renderAccounts();
-  renderTransactions();
-  
-  // Refresh the page so the dashboard-ui.js script picks up the new notification
+  // Save
+  localStorage.setItem(
+    'reenBankState',
+    JSON.stringify(bankState)
+  );
+
+
+  closeFundModal();
+
+  // Refresh account/transaction UI if functions exist
+  if (typeof renderAccounts === 'function') {
+    renderAccounts();
+  }
+
+  if (typeof renderTransactions === 'function') {
+    renderTransactions();
+  }
+
+  // Refresh dashboard
   window.location.reload();
 }
+
+
+
+// ==========================================
+// WITHDRAW FROM ACCOUNT
+// ==========================================
+
+function openWithdrawModal(accountId) {
+  currentActiveAccount = accountId;
+
+  const account = bankState.accounts.find(a => a.id === accountId);
+
+  if (!account) {
+    console.error('Account not found');
+    return;
+  }
+
+  const modal = document.getElementById('withdrawModal');
+  const accountName = document.getElementById('withdraw-account-name');
+  const balanceText = document.getElementById('withdraw-current-balance');
+  const amountInput = document.getElementById('withdraw-amount');
+
+  accountName.textContent = `Withdraw from ${account.name}`;
+
+  balanceText.textContent =
+    `Available balance: ${formatCurrency(account.balance)}`;
+
+  amountInput.value = '';
+
+  modal.classList.remove('hidden');
+
+  setTimeout(() => {
+    amountInput.focus();
+  }, 100);
+}
+
+
+function closeWithdrawModal() {
+  const modal = document.getElementById('withdrawModal');
+
+  if (modal) {
+    modal.classList.add('hidden');
+  }
+
+  currentActiveAccount = '';
+}
+
+
+function processWithdrawal() {
+  const amountInput = document.getElementById('withdraw-amount');
+  const amount = parseFloat(amountInput.value);
+
+  // Grab the new recipient details from the UI
+  const bank = document.getElementById('withdraw-bank')?.value;
+  const accNum = document.getElementById('withdraw-account-num')?.value;
+  const accName = document.getElementById('withdraw-account-name')?.value;
+
+  if (isNaN(amount) || amount <= 0) {
+    alert('Please enter a valid amount greater than zero.');
+    return;
+  }
+
+  // Ensure recipient details are filled
+  if (!bank || !accNum || !accName) {
+    alert('Please fill in all recipient details.');
+    return;
+  }
+
+  const account = bankState.accounts.find(
+    a => a.id === currentActiveAccount
+  );
+
+  if (!account) {
+    alert('Account not found.');
+    return;
+  }
+
+  // Check balance
+  if (amount > account.balance) {
+    alert(
+      `Insufficient funds in ${account.name}. Your balance is ${formatCurrency(account.balance)}`
+    );
+    return;
+  }
+
+  // Remove money
+  account.balance -= amount;
+
+  // Create transaction
+  const newTx = {
+    id: Date.now(),
+    accountId: account.id,
+    type: 'debit',
+    amount: amount,
+    date: getCurrentFormattedDate(),
+    method: 'Bank Transfer', // Changed from 'Self Withdrawal' to match the new UI
+    status: 'Completed'
+  };
+
+  bankState.transactions.push(newTx);
+
+  // Notification
+  bankState.unreadNotis = (bankState.unreadNotis || 0) + 1;
+
+  // Save
+  localStorage.setItem(
+    'reenBankState',
+    JSON.stringify(bankState)
+  );
+
+  // Close the original withdraw modal
+  closeWithdrawModal();
+
+  // Refresh UI
+  if (typeof renderAccounts === 'function') {
+    renderAccounts();
+  }
+  if (typeof renderTransactions === 'function') {
+    renderTransactions();
+  }
+
+  // ==========================================
+  // INJECT AMOUNT AND SHOW SUCCESS MODAL
+  // ==========================================
+  const successModal = document.getElementById('successWithdrawModal');
+  const amountSpan = document.getElementById('withdraw-success-amount');
+  
+  if (successModal && amountSpan) {
+    // Format the number and inject it into the span
+    amountSpan.textContent = '₦' + amount.toLocaleString('en-NG', { minimumFractionDigits: 2 });
+    
+    // Show the modal
+    successModal.classList.remove('hidden');
+    successModal.classList.add('flex'); // Ensures it centers perfectly
+    if (typeof lucide !== 'undefined') lucide.createIcons();
+  }
+}
+
+// ==========================================
+// GO BACK BUTTON FUNCTION
+// ==========================================
+function closeWithdrawSuccessModal() {
+  const modal = document.getElementById('successWithdrawModal');
+  if (modal) {
+    modal.classList.add('hidden');
+  }
+  
+  // Refresh dashboard ONLY after they click Go Back
+  window.location.reload();
+}
+
+
+
 
 // 6. Initialize UI when DOM is loaded
 window.addEventListener('DOMContentLoaded', () => {
@@ -310,3 +496,65 @@ window.addEventListener('DOMContentLoaded', () => {
   renderAccounts();
   renderTransactions();
 });
+
+window.submitNewAccount = function() {
+  const nameInput = document.getElementById('new-account-name').value.trim();
+  
+  if (!nameInput) {
+    alert("Please enter a name for the new account.");
+    return;
+  }
+
+  // Pull fresh state from local storage directly
+  let state = JSON.parse(localStorage.getItem('reenBankState')) || { accounts: [], transactions: [] };
+
+  const newAccountId = 'acc_' + Date.now();
+  const newAccount = {
+    id: newAccountId,
+    name: nameInput,
+    balance: 0, 
+    hidden: false,
+    theme: 'border-[#19B66B]'
+  };
+
+  // Save to database
+  state.accounts.push(newAccount);
+  localStorage.setItem('reenBankState', JSON.stringify(state));
+  
+  // Close Add Account Modal
+  const addModal = document.getElementById('addAccountModal');
+  if (addModal) addModal.classList.add('hidden');
+
+  // Show Success Modal
+  const successModal = document.getElementById('successAccountModal');
+  const successMsg = document.getElementById('success-account-msg');
+  const fundBtn = document.getElementById('success-fund-btn');
+
+  if (successModal && successMsg) {
+    successMsg.innerHTML = `<span class="text-[#19B66B] font-bold">${nameInput}</span> has been created successfully.`;
+    
+    // Connect the Fund Button
+    if (fundBtn) {
+      fundBtn.onclick = function() {
+        successModal.classList.add('hidden');
+        
+        // Memorize which account we are funding
+        window.currentActiveAccount = newAccountId;
+        
+        // Open the Transaction Modal
+        const txModal = document.getElementById('transactionModal');
+        const txTitle = document.getElementById('modal-title');
+        const txInput = document.getElementById('tx-amount');
+        
+        if (txModal && txTitle && txInput) {
+          txInput.value = ''; 
+          txTitle.textContent = `Fund ${nameInput}`;
+          txModal.classList.remove('hidden');
+          setTimeout(() => txInput.focus(), 100);
+        }
+      };
+    }
+    successModal.classList.remove('hidden');
+    if (typeof lucide !== 'undefined') lucide.createIcons();
+  }
+};
