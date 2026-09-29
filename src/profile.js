@@ -222,16 +222,27 @@ if (savePwdBtn) {
       storedUser.password = newPwd; // Update password
       localStorage.setItem('reenUser', JSON.stringify(storedUser)); // Save back
       
-      // Close modal and show success alert
+      // Close the reset modal
       resetModal.classList.add('hidden');
       
-      // Optional: Delay the alert slightly so the modal closes smoothly first
-      setTimeout(() => {
-        alert("Your password has been successfully updated!");
-      }, 300);
+      // Open the Success Modal instead of the alert
+      const successModal = document.getElementById('successPwdModal');
+      if (successModal) {
+        successModal.classList.remove('hidden');
+        if (typeof lucide !== 'undefined') lucide.createIcons();
+      }
     }
   });
 }
+
+// Function to close the Success Modal
+window.closeSuccessPwdModal = function() {
+  const modal = document.getElementById('successPwdModal');
+  if (modal) {
+    modal.classList.add('hidden');
+  }
+};
+
 // 5. Toggle Password Visibility
 const togglePwdBtns = document.querySelectorAll('.toggle-pwd-btn');
 
@@ -257,6 +268,7 @@ togglePwdBtns.forEach(btn => {
     }
   });
 });
+
 /* =========================================
    GENDER DROPDOWN PERSISTENCE
    ========================================= */

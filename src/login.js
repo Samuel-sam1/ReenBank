@@ -232,14 +232,26 @@ document.addEventListener("DOMContentLoaded", () => {
         storedUser.password = newPwd;
         localStorage.setItem('reenUser', JSON.stringify(storedUser));
         
+        // Close the reset modal
         resetModal.classList.add('hidden');
         
-        setTimeout(() => {
-          alert("Your password has been successfully updated! You can now log in.");
-        }, 300);
+        // Open the Success Modal instead of the alert
+        const successModal = document.getElementById('successPwdModal');
+        if (successModal) {
+          successModal.classList.remove('hidden');
+          if (typeof lucide !== 'undefined') lucide.createIcons();
+        }
       }
     });
   }
+
+  // Function to close the Success Modal
+  window.closeSuccessPwdModal = function() {
+    const modal = document.getElementById('successPwdModal');
+    if (modal) {
+      modal.classList.add('hidden');
+    }
+  };
 
   // 5. Toggle Password Visibility inside the Modal
   const togglePwdBtns = document.querySelectorAll('.toggle-pwd-btn');
