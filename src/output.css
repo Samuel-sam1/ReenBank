@@ -402,6 +402,9 @@
   .z-\[120\] {
     z-index: 120;
   }
+  .z-\[130\] {
+    z-index: 130;
+  }
   .col-span-1 {
     grid-column: span 1 / span 1;
   }
@@ -1401,6 +1404,10 @@
   .leading-\[1\.05\] {
     --tw-leading: 1.05;
     line-height: 1.05;
+  }
+  .leading-relaxed {
+    --tw-leading: var(--leading-relaxed);
+    line-height: var(--leading-relaxed);
   }
   .leading-tight {
     --tw-leading: var(--leading-tight);

@@ -404,14 +404,11 @@ function processWithdrawal() {
     return;
   }
 
-  // Check balance
-  if (amount > account.balance) {
-    alert(
-      `Insufficient funds in ${account.name}. Your balance is ${formatCurrency(account.balance)}`
-    );
-    return;
-  }
-
+// AFTER:
+if (amount > account.balance) {
+  showInsufficientFundsModal(account.name, account.balance);
+  return;
+}
   // Remove money
   account.balance -= amount;
 
@@ -664,5 +661,35 @@ window.executeAccountDeletion = function() {
   }
   if (typeof lucide !== 'undefined') {
     lucide.createIcons();
+  }
+};
+/* =========================================
+   INSUFFICIENT FUNDS MODAL CONTROLLER
+   ========================================= */
+
+window.showInsufficientFundsModal = function(accountName, balance) {
+  const modal = document.getElementById('insufficientFundsModal');
+  const nameEl = document.getElementById('insufficient-acc-name');
+  const balanceEl = document.getElementById('insufficient-acc-balance');
+
+  if (nameEl) nameEl.textContent = accountName;
+  if (balanceEl) {
+    balanceEl.textContent = typeof formatCurrency === 'function'
+      ? formatCurrency(balance)
+      : '₦ ' + balance.toLocaleString('en-NG', { minimumFractionDigits: 2 });
+  }
+
+  if (modal) {
+    modal.classList.remove('hidden');
+    modal.classList.add('flex');
+    if (typeof lucide !== 'undefined') lucide.createIcons();
+  }
+};
+
+window.closeInsufficientFundsModal = function() {
+  const modal = document.getElementById('insufficientFundsModal');
+  if (modal) {
+    modal.classList.add('hidden');
+    modal.classList.remove('flex');
   }
 };

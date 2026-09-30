@@ -540,6 +540,36 @@
 
   </div>
 </div>
+<!-- ==========================================
+     INSUFFICIENT FUNDS MODAL
+========================================== -->
+<div
+  id="insufficientFundsModal"
+  class="fixed inset-0 bg-black/60 z-[130] hidden flex items-center justify-center p-4 backdrop-blur-sm"
+>
+  <div class="bg-white rounded-3xl px-8 pt-10 pb-10 w-full max-w-md shadow-2xl text-center transform transition-all">
+    
+    <!-- Warning Icon -->
+    <div class="w-20 h-20 rounded-full bg-red-50 flex items-center justify-center mx-auto mb-6">
+      <i data-lucide="alert-circle" class="w-10 h-10 text-[#FA6E6E]"></i>
+    </div>
+    
+    <h3 class="text-2xl font-bold text-gray-900 mb-2">Insufficient Funds</h3>
+    
+    <p class="text-gray-500 text-sm mb-8 px-4 leading-relaxed">
+      You do not have enough funds in <span id="insufficient-acc-name" class="font-bold text-gray-900">this account</span>. Your available balance is <span id="insufficient-acc-balance" class="font-bold text-[#FA6E6E]">₦ 0.00</span>.
+    </p>
+    
+    <!-- Dismiss Button -->
+    <button
+      type="button"
+      onclick="closeInsufficientFundsModal()"
+      class="w-full cursor-pointer bg-gray-100 text-gray-700 font-bold py-4 rounded-xl hover:bg-gray-200 transition-colors"
+    >
+      Okay, Got It
+    </button>
+  </div>
+</div>
   <!-- Scripts -->
   <script src="https://unpkg.com/lucide@latest"></script>
   <!-- Link to our external script -->
