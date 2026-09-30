@@ -5,29 +5,54 @@
 
 document.addEventListener('DOMContentLoaded', () => {
 
-  /* =========================================
-     1. REAL-TIME SEARCH FUNCTIONALITY
-     ========================================= */
-  const searchInput = document.getElementById('global-search');
-  
-  if (searchInput) {
-    searchInput.addEventListener('input', function(e) {
-      const searchTerm = e.target.value.toLowerCase();
-      // Find all transaction rows on the page that have the 'searchable-tx' class
-      const transactions = document.querySelectorAll('.searchable-tx');
-      
-      transactions.forEach(row => {
-        // Read the text content of the row
-        const rowText = row.textContent.toLowerCase();
-        // If it matches the search term, show it. Otherwise, hide it.
-        if (rowText.includes(searchTerm)) {
-          row.style.display = '';
-        } else {
-          row.style.display = 'none';
-        }
-      });
-    });
+/* =========================================
+   1. CONTEXT-AWARE & COMMA-INSENSITIVE SEARCH
+   ========================================= */
+const searchInput = document.getElementById('global-search');
+
+if (searchInput) {
+  const currentPath = window.location.pathname.toLowerCase();
+  const isAccountPage = currentPath.includes('account');
+
+  // Update placeholder to match the current page
+  if (isAccountPage) {
+    searchInput.placeholder = "Search accounts...";
+  } else {
+    searchInput.placeholder = "Search transactions...";
   }
+
+  searchInput.addEventListener('input', function(e) {
+    // Strip commas from what the user typed
+    const cleanSearch = e.target.value.toLowerCase().replace(/,/g, '').trim();
+
+    // Helper: checks if element text matches after removing commas
+    const checkMatch = (element) => {
+      const cleanContent = element.textContent.toLowerCase().replace(/,/g, '');
+      return cleanContent.includes(cleanSearch);
+    };
+
+    if (isAccountPage) {
+      // 1. ACCOUNTS PAGE: Filter Account Cards
+      const accountCards = document.querySelectorAll('.searchable-account');
+      accountCards.forEach(card => {
+        card.style.display = checkMatch(card) ? '' : 'none';
+      });
+
+      // Also filter transactions below if any are present
+      const txRows = document.querySelectorAll('.searchable-tx');
+      txRows.forEach(row => {
+        row.style.display = checkMatch(row) ? '' : 'none';
+      });
+
+    } else {
+      // 2. OTHER PAGES: Filter Transaction Rows
+      const transactions = document.querySelectorAll('.searchable-tx');
+      transactions.forEach(row => {
+        row.style.display = checkMatch(row) ? '' : 'none';
+      });
+    }
+  });
+}
 
   /* =========================================
      2. NOTIFICATION SYSTEM

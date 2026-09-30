@@ -57,7 +57,7 @@ function renderAccounts() {
     const eyeIcon = acc.hidden ? 'eye-off' : 'eye';
     
     html += `
-      <div class="bg-[#DDF7EE] rounded-2xl p-6 shadow-sm flex flex-col justify-between h-48 border-l-4 ${acc.theme}">
+      <div class="searchable-account bg-[#DDF7EE] rounded-2xl p-6 shadow-sm flex flex-col justify-between h-48 border-l-4 ${acc.theme}">
         <div class="flex justify-between items-start">
           <div>
             <p class="text-[#5645A5] text-sm font-medium mb-1">${acc.name}</p>
