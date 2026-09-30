@@ -51,6 +51,19 @@ function renderAccounts() {
 
   // Loop through all accounts in storage
   bankState.accounts.forEach(acc => {
+
+const isDeletable = acc.canDelete || (typeof acc.id === 'string' && acc.id.startsWith('acc_'));
+
+const deleteButtonHTML = isDeletable ? `
+  <button 
+    type="button" 
+    onclick="openDeleteModal('${acc.id}')" 
+    class="cursor-pointer text-gray-400 hover:text-[#FA6E6E] transition-colors p-1.5 rounded-lg hover:bg-red-50"
+    title="Delete Account"
+  >
+    <i data-lucide="trash-2" class="w-4 h-4"></i>
+  </button>
+` : '';
     // Determine visibility state for the balance
     const balanceDisplay = acc.hidden ? '₦ * * * * *' : formatCurrency(acc.balance);
     // If hidden, show the 'eye-off' icon. If visible, show 'eye'
@@ -66,6 +79,9 @@ function renderAccounts() {
           <button onclick="toggleVisibility('${acc.id}')" class=" cursor-pointer text-gray-500 hover:text-gray-700">
             <i data-lucide="${eyeIcon}" class="w-4 h-4"></i>
           </button>
+          <div class="flex items-center gap-2">
+        ${deleteButtonHTML}
+      </div>
         </div>
         <div class="flex gap-3 mt-4">
           <button onclick="openFundModal('${acc.id}', 'fund')" class="cursor-pointer flex-1 bg-[#19B66B] text-white text-sm font-medium py-2 rounded-lg hover:bg-green-600 transition-colors">Fund</button>
@@ -188,7 +204,8 @@ function submitNewAccount() {
     name: nameInput,
     balance: 0, 
     hidden: false,
-    theme: 'border-transparent' 
+    theme: 'border-transparent' ,
+    canDelete: true
   };
 
   bankState.accounts.push(newAccount);
@@ -571,5 +588,74 @@ window.toggleCreditCardFields = function() {
   } else {
     // Hide the card details
     ccDetails.classList.add('hidden');
+  }
+};
+/* =========================================
+   DELETE ACCOUNT MODAL CONTROLLER
+   ========================================= */
+
+let accountPendingDeletionId = null;
+
+// 1. Open the modal and set target account
+window.openDeleteModal = function(accountId) {
+  let state = JSON.parse(localStorage.getItem('reenBankState'));
+  if (!state || !state.accounts) return;
+
+  const targetAccount = state.accounts.find(a => a.id === accountId);
+  if (!targetAccount) return;
+
+  accountPendingDeletionId = accountId;
+
+  // Set the dynamic account name in the warning message
+  const nameSpan = document.getElementById('delete-modal-acc-name');
+  if (nameSpan) {
+    nameSpan.textContent = `"${targetAccount.name}"`;
+  }
+
+  // Show the modal
+  const modal = document.getElementById('deleteAccountModal');
+  if (modal) {
+    modal.classList.remove('hidden');
+    if (typeof lucide !== 'undefined') lucide.createIcons();
+  }
+};
+
+// 2. Close the modal
+window.closeDeleteModal = function() {
+  const modal = document.getElementById('deleteAccountModal');
+  if (modal) {
+    modal.classList.add('hidden');
+  }
+  accountPendingDeletionId = null;
+};
+
+// 3. Perform the actual deletion when clicking "Delete" inside the modal
+window.executeAccountDeletion = function() {
+  if (!accountPendingDeletionId) return;
+
+  let state = JSON.parse(localStorage.getItem('reenBankState'));
+  if (!state || !state.accounts) return;
+
+  // Remove the account from state
+  state.accounts = state.accounts.filter(a => a.id !== accountPendingDeletionId);
+
+  // Save back to localStorage
+  localStorage.setItem('reenBankState', JSON.stringify(state));
+  if (typeof bankState !== 'undefined') {
+    bankState = state;
+  }
+
+  // Close the modal
+  closeDeleteModal();
+
+  // Re-render accounts and update icons immediately without page reload
+  if (typeof renderAccounts === 'function') {
+    renderAccounts();
+  }
+  if (typeof renderTransactions === 'function') {
+    renderTransactions();
+  }
+  if (typeof lucide !== 'undefined') {
+    lucide.createIcons();
   }
 };

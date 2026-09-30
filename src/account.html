@@ -500,6 +500,46 @@
     </div>
   </div>
 </div>
+<!-- ==========================================
+     DELETE ACCOUNT CONFIRMATION MODAL
+========================================== -->
+<div
+  id="deleteAccountModal"
+  class="fixed inset-0 bg-black/60 z-[120] hidden flex items-center justify-center p-4 backdrop-blur-sm"
+>
+  <div class="bg-white rounded-3xl px-8 pt-10 pb-10 w-full max-w-md shadow-2xl text-center transform transition-all">
+    
+    <!-- Warning/Trash Icon -->
+    <div class="w-20 h-20 rounded-full bg-red-50 flex items-center justify-center mx-auto mb-6">
+      <i data-lucide="trash-2" class="w-10 h-10 text-[#FA6E6E]"></i>
+    </div>
+    
+    <h3 class="text-2xl font-bold text-gray-900 mb-2">Delete Account</h3>
+    
+    <p class="text-gray-500 text-sm mb-8 px-2">
+      Are you sure you want to delete <span id="delete-modal-acc-name" class="font-bold text-gray-900">this account</span>? All records linked to it will be removed. This action cannot be undone.
+    </p>
+    
+    <!-- Buttons (100% Width) -->
+    <div class="flex gap-4 w-full">
+      <button
+        type="button"
+        onclick="closeDeleteModal()"
+        class="flex-1 cursor-pointer bg-gray-100 text-gray-700 font-bold py-4 rounded-xl hover:bg-gray-200 transition-colors"
+      >
+        Cancel
+      </button>
+      <button
+        type="button"
+        onclick="executeAccountDeletion()"
+        class="flex-1 cursor-pointer bg-[#FA6E6E] text-white font-bold py-4 rounded-xl hover:bg-red-600 transition-colors"
+      >
+        Delete
+      </button>
+    </div>
+
+  </div>
+</div>
   <!-- Scripts -->
   <script src="https://unpkg.com/lucide@latest"></script>
   <!-- Link to our external script -->
