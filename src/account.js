@@ -575,6 +575,13 @@ window.submitNewAccount = function() {
     if (typeof lucide !== 'undefined') lucide.createIcons();
   }
 };
+window.closeSuccessModal = function() {
+  const modal = document.getElementById('successAccountModal');
+  if (modal) modal.classList.add('hidden');
+  
+  // Reload so the Overview dashboard shows the new account totals
+  window.location.reload(); 
+};
 // Toggles the credit card fields in the Fund Modal
 window.toggleCreditCardFields = function() {
   const selectedMethod = document.querySelector('input[name="fund-payment-method"]:checked');
