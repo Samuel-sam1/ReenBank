@@ -429,3 +429,254 @@ window.toggleTxCreditCardFields = function() {
     ccDetails.classList.add('hidden');
   }
 };
+/* =========================================================
+   DATE RANGE FILTER & EMPTY STATE LOGIC (OVERVIEW.JS)
+   ========================================================= */
+
+const monthNames = ["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"];
+
+// Helper to convert transaction date string or timestamp to a JS Date
+function parseTxDate(tx) {
+  if (!tx) return null;
+  // If numeric timestamp
+  if (typeof tx.id === 'number' && tx.id > 1600000000000) {
+    return new Date(tx.id);
+  }
+  // If formatted string like "29.Sep.2026 - 14:30"
+  if (typeof tx.date === 'string' && tx.date.includes('.')) {
+    const parts = tx.date.split(' - ')[0].split('.');
+    if (parts.length === 3) {
+      const day = parseInt(parts[0], 10);
+      const month = monthNames.indexOf(parts[1]);
+      const year = parseInt(parts[2], 10);
+      if (month !== -1) return new Date(year, month, day);
+    }
+  }
+  // General fallback
+  const fallback = new Date(tx.date);
+  return isNaN(fallback.getTime()) ? new Date() : fallback;
+}
+
+// 1. Initialize Date Button with Current Month & Year
+function initDateFilterDefaults() {
+  const now = new Date();
+  const year = now.getFullYear();
+  const month = now.getMonth();
+
+  // Range: Start of current month to today
+  const firstDay = new Date(year, month, 1);
+  const startStr = `${String(firstDay.getDate()).padStart(2, '0')} ${monthNames[month]}`;
+  const endStr = `${String(now.getDate()).padStart(2, '0')} ${monthNames[month]}, ${year}`;
+
+  const label = document.getElementById('date-filter-label');
+  if (label) {
+    label.textContent = `${startStr} - ${endStr}`;
+  }
+
+  // Pre-fill modal inputs (YYYY-MM-DD)
+  const startInput = document.getElementById('filter-start-date');
+  const endInput = document.getElementById('filter-end-date');
+  if (startInput) startInput.value = firstDay.toISOString().split('T')[0];
+  if (endInput) endInput.value = now.toISOString().split('T')[0];
+}
+
+// 2. Open / Close Modal
+window.openDateFilterModal = function() {
+  const modal = document.getElementById('dateFilterModal');
+  if (modal) {
+    modal.classList.remove('hidden');
+    if (typeof lucide !== 'undefined') lucide.createIcons();
+  }
+};
+
+window.closeDateFilterModal = function() {
+  const modal = document.getElementById('dateFilterModal');
+  if (modal) modal.classList.add('hidden');
+};
+
+// 3. Reset Filter to all transactions
+window.resetDateFilter = function() {
+  initDateFilterDefaults();
+  closeDateFilterModal();
+  renderFilteredTransactions(null, null);
+};
+
+// 4. Apply Date Filter
+window.applyDateFilter = function() {
+  const startVal = document.getElementById('filter-start-date').value;
+  const endVal = document.getElementById('filter-end-date').value;
+
+  if (!startVal || !endVal) {
+    alert("Please select both a start and end date.");
+    return;
+  }
+
+  const startDate = new Date(startVal);
+  startDate.setHours(0, 0, 0, 0);
+
+  const endDate = new Date(endVal);
+  endDate.setHours(23, 59, 59, 999);
+
+  if (startDate > endDate) {
+    alert("Start date cannot be after end date.");
+    return;
+  }
+
+  // Update button label to selected range
+  const label = document.getElementById('date-filter-label');
+  if (label) {
+    const sStr = `${String(startDate.getDate()).padStart(2, '0')} ${monthNames[startDate.getMonth()]}`;
+    const eStr = `${String(endDate.getDate()).padStart(2, '0')} ${monthNames[endDate.getMonth()]}, ${endDate.getFullYear()}`;
+    label.textContent = `${sStr} - ${eStr}`;
+  }
+
+  closeDateFilterModal();
+  renderFilteredTransactions(startDate, endDate);
+};
+
+// 5. Render Transactions with "Not Found" Empty State
+function renderFilteredTransactions(startDate, endDate) {
+  // Use the container where your overview table/list renders transactions
+  const container = document.getElementById('overview-transactions-list') || document.getElementById('profile-transactions-list');
+  if (!container) return;
+
+  let state = JSON.parse(localStorage.getItem('reenBankState')) || { accounts: [], transactions: [] };
+  let txList = [...(state.transactions || [])];
+
+  // Apply date range filter if dates provided
+  if (startDate && endDate) {
+    txList = txList.filter(tx => {
+      const txDate = parseTxDate(tx);
+      return txDate && txDate >= startDate && txDate <= endDate;
+    });
+  }
+
+  container.innerHTML = '';
+
+  // EMPTY STATE: If no transactions found
+  if (txList.length === 0) {
+    container.innerHTML = `
+      <div class="flex flex-col items-center justify-center py-12 px-4 text-center">
+        <div class="w-14 h-14 rounded-full bg-gray-100 flex items-center justify-center mb-3 text-gray-400">
+          <i data-lucide="calendar-x-2" class="w-7 h-7"></i>
+        </div>
+        <p class="text-gray-900 font-bold text-base mb-1">No Transactions Found</p>
+        <p class="text-gray-400 text-sm max-w-xs">There are no records for this period. Try expanding your date range.</p>
+      </div>
+    `;
+    if (typeof lucide !== 'undefined') lucide.createIcons();
+    return;
+  }
+
+  // Render matching transactions
+  txList.reverse().slice(0, 10).forEach(tx => {
+    const matchedAccount = state.accounts.find(a => a.id === tx.accountId);
+    const accName = matchedAccount ? matchedAccount.name : "System";
+    const isCredit = tx.type === 'credit';
+    const amountColor = isCredit ? 'text-[#19B66B]' : 'text-red-500';
+    const amountPrefix = isCredit ? '+' : '- ';
+
+    const rowHTML = `
+      <div class="searchable-tx flex justify-between items-center py-3.5 border-b border-gray-100 hover:bg-gray-50/80 px-2 rounded-xl transition-colors">
+        <div class="flex-1 min-w-0">
+          <p class="text-sm font-semibold text-gray-900 truncate">${accName}</p>
+          <p class="text-xs text-gray-400">${tx.method || 'Transfer'}</p>
+        </div>
+        <p class="text-xs text-gray-400 w-36 text-center">${tx.date}</p>
+        <p class="${amountColor} font-bold text-sm w-28 text-right">
+          ${amountPrefix}₦ ${Number(tx.amount).toLocaleString('en-NG', { minimumFractionDigits: 2 })}
+        </p>
+      </div>
+    `;
+    container.insertAdjacentHTML('beforeend', rowHTML);
+  });
+
+  if (typeof lucide !== 'undefined') lucide.createIcons();
+}
+
+// Automatically initialize on page load
+document.addEventListener("DOMContentLoaded", () => {
+  initDateFilterDefaults();
+});
+
+  /* =========================================================
+   STATISTICS MONTH FILTER (OVERVIEW.JS)
+   ========================================================= */
+
+const statMonthNames = ["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"];
+
+// Helper to reliably parse transaction dates
+function getTransactionDate(tx) {
+  if (!tx) return null;
+  if (typeof tx.id === 'number' && tx.id > 1600000000000) {
+    return new Date(tx.id);
+  }
+  if (typeof tx.date === 'string' && tx.date.includes('.')) {
+    const parts = tx.date.split(' - ')[0].split('.');
+    if (parts.length === 3) {
+      const day = parseInt(parts[0], 10);
+      const monthIdx = statMonthNames.indexOf(parts[1]);
+      const year = parseInt(parts[2], 10);
+      if (monthIdx !== -1) return new Date(year, monthIdx, day);
+    }
+  }
+  const fallback = new Date(tx.date);
+  return isNaN(fallback.getTime()) ? null : fallback;
+}
+
+window.filterStatisticsByMonth = function(selectedVal) {
+  const incomeBar = document.getElementById('stat-income-bar');
+  const incomeText = document.getElementById('stat-income-text');
+  const expenseBar = document.getElementById('stat-expense-bar');
+  const expenseText = document.getElementById('stat-expense-text');
+
+  if (!incomeBar || !incomeText || !expenseBar || !expenseText) return;
+
+  const state = JSON.parse(localStorage.getItem('reenBankState')) || { transactions: [] };
+  const transactions = state.transactions || [];
+
+  const now = new Date();
+  const targetMonth = selectedVal === 'current' ? now.getMonth() : parseInt(selectedVal, 10);
+  const targetYear = now.getFullYear();
+
+  let totalIncome = 0;
+  let totalExpense = 0;
+
+  // Filter transactions for the selected month and year
+  transactions.forEach(tx => {
+    const d = getTransactionDate(tx);
+    if (d && d.getMonth() === targetMonth && d.getFullYear() === targetYear) {
+      const amount = Number(tx.amount) || 0;
+      if (tx.type === 'credit') {
+        totalIncome += amount;
+      } else if (tx.type === 'debit') {
+        totalExpense += amount;
+      }
+    }
+  });
+
+  // Display formatted figures
+  incomeText.textContent = `₦ ${totalIncome.toLocaleString('en-NG', { minimumFractionDigits: 2, maximumFractionDigits: 2 })}`;
+  expenseText.textContent = `₦ ${totalExpense.toLocaleString('en-NG', { minimumFractionDigits: 2, maximumFractionDigits: 2 })}`;
+
+  // Update visual progress bars (0% if no transactions)
+  const totalFlow = totalIncome + totalExpense;
+  if (totalFlow === 0) {
+    incomeBar.style.width = '0%';
+    expenseBar.style.width = '0%';
+  } else {
+    incomeBar.style.width = `${Math.round((totalIncome / totalFlow) * 100)}%`;
+    expenseBar.style.width = `${Math.round((totalExpense / totalFlow) * 100)}%`;
+  }
+};
+
+// Initialize statistics on page load
+document.addEventListener("DOMContentLoaded", () => {
+  const statsFilter = document.getElementById('stats-month-filter');
+  if (statsFilter) {
+    filterStatisticsByMonth(statsFilter.value || 'current');
+  }
+  if (typeof lucide !== 'undefined') {
+    lucide.createIcons();
+  }
+});

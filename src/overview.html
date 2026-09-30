@@ -135,11 +135,17 @@
               <button onclick="toggleGlobalVisibility()" class="cursor-pointer p-2 bg-gray-100 rounded-lg hover:bg-gray-200 text-gray-600 transition-colors">
                 <i id="global-eye-icon" data-lucide="eye-off" class="w-4 h-4"></i>
               </button>
-              <button class="flex items-center gap-2 px-3 py-2 bg-gray-100 rounded-lg hover:bg-gray-200 text-xs font-medium text-gray-600">
-                <i data-lucide="calendar" class="w-4 h-4"></i>
-                Feb 22 - Mar 21, 2023
-                <i data-lucide="chevron-down" class="w-4 h-4"></i>
-              </button>
+             <!-- Date Filter Button -->
+<button 
+  type="button" 
+  id="date-filter-btn" 
+  onclick="openDateFilterModal()" 
+  class="cursor-pointer flex items-center gap-2.5 px-4 py-2.5 bg-gray-50 border border-gray-200 rounded-xl text-sm font-semibold text-gray-700 hover:bg-gray-100 hover:border-gray-300 transition-colors"
+>
+  <i data-lucide="calendar" class="w-4 h-4 text-[#19B66B]"></i>
+  <span id="date-filter-label">Loading date...</span>
+  <i data-lucide="chevron-down" class="w-4 h-4 text-gray-400"></i>
+</button>
             </div>
           </div>
           
@@ -177,49 +183,69 @@
         </section>
 
         <!-- Statistics -->
-        <section>
-          <div class="flex justify-between items-center mb-6">
-            <h3 class="text-xl font-bold">Statistics</h3>
-            <button class="cursor-pointer flex items-center gap-2 px-3 py-2 bg-gray-100 rounded-lg hover:bg-gray-200 text-xs font-medium text-gray-600">
-              This Month
-              <i data-lucide="chevron-down" class="w-4 h-4"></i>
-            </button>
-          </div>
-          
-          <div class="space-y-6">
-            <!-- Income Bar -->
-            <div class="flex items-center justify-between gap-6">
-              <div class="flex items-center gap-4 w-1/4">
-                 <div class="w-10 h-10 border-2 border-[#19B66B] rounded-xl flex items-center justify-center font-bold text-[#19B66B] text-lg bg-[#F6FBF9]">
-                  rb
-                </div>
-                <span class="font-bold text-gray-900">Income</span>
-              </div>
-              <div class="flex-1 bg-gray-200 h-3 rounded-full overflow-hidden">
-                <div id="stat-income-bar" class="bg-[#19B66B] h-full rounded-full transition-all duration-500" style="width: 0%;"></div>
-              </div>
-              <div class="w-1/4 text-right">
-                <span id="stat-income-text" class="font-bold text-lg text-gray-900">₦ 0.00</span>
-              </div>
-            </div>
+      <section>
+  <div class="flex justify-between items-center mb-6">
+    <h3 class="text-xl font-bold text-gray-900">Statistics</h3>
+    
+    <!-- Functional Month Dropdown -->
+    <div class="relative">
+      <select 
+        id="stats-month-filter" 
+        onchange="filterStatisticsByMonth(this.value)" 
+        class="cursor-pointer appearance-none pl-3 pr-8 py-2 bg-gray-100 hover:bg-gray-200 rounded-lg text-xs font-semibold text-gray-600 outline-none focus:ring-2 focus:ring-[#19B66B] transition-colors"
+      >
+        <option value="current" selected>This Month</option>
+        <option value="0">January</option>
+        <option value="1">February</option>
+        <option value="2">March</option>
+        <option value="3">April</option>
+        <option value="4">May</option>
+        <option value="5">June</option>
+        <option value="6">July</option>
+        <option value="7">August</option>
+        <option value="8">September</option>
+        <option value="9">October</option>
+        <option value="10">November</option>
+        <option value="11">December</option>
+      </select>
+      <i data-lucide="chevron-down" class="w-3.5 h-3.5 text-gray-500 absolute right-2.5 top-1/2 -translate-y-1/2 pointer-events-none"></i>
+    </div>
+  </div>
+  
+  <div class="space-y-6">
+    <!-- Income Bar -->
+    <div class="flex items-center justify-between gap-6">
+      <div class="flex items-center gap-4 w-1/4">
+        <div class="w-10 h-10 border-2 border-[#19B66B] rounded-xl flex items-center justify-center font-bold text-[#19B66B] text-lg bg-[#F6FBF9]">
+          rb
+        </div>
+        <span class="font-bold text-gray-900">Income</span>
+      </div>
+      <div class="flex-1 bg-gray-200 h-3 rounded-full overflow-hidden">
+        <div id="stat-income-bar" class="bg-[#19B66B] h-full rounded-full transition-all duration-500" style="width: 0%;"></div>
+      </div>
+      <div class="w-1/4 text-right">
+        <span id="stat-income-text" class="font-bold text-lg text-gray-900">₦ 0.00</span>
+      </div>
+    </div>
 
-            <!-- Expense Bar -->
-            <div class="flex items-center justify-between gap-6">
-              <div class="flex items-center gap-4 w-1/4">
-                 <div class="w-10 h-10 border-2 border-red-400 rounded-xl flex items-center justify-center font-bold text-red-400 text-lg bg-[#F6FBF9]">
-                  rb
-                </div>
-                <span class="font-bold text-gray-900">Expense</span>
-              </div>
-              <div class="flex-1 bg-gray-200 h-3 rounded-full overflow-hidden">
-                <div id="stat-expense-bar" class="bg-red-500 h-full rounded-full transition-all duration-500" style="width: 0%;"></div>
-              </div>
-              <div class="w-1/4 text-right">
-                <span id="stat-expense-text" class="font-bold text-lg text-gray-900">₦ 0.00</span>
-              </div>
-            </div>
-          </div>
-        </section>
+    <!-- Expense Bar -->
+    <div class="flex items-center justify-between gap-6">
+      <div class="flex items-center gap-4 w-1/4">
+        <div class="w-10 h-10 border-2 border-red-400 rounded-xl flex items-center justify-center font-bold text-red-400 text-lg bg-[#F6FBF9]">
+          rb
+        </div>
+        <span class="font-bold text-gray-900">Expense</span>
+      </div>
+      <div class="flex-1 bg-gray-200 h-3 rounded-full overflow-hidden">
+        <div id="stat-expense-bar" class="bg-red-500 h-full rounded-full transition-all duration-500" style="width: 0%;"></div>
+      </div>
+      <div class="w-1/4 text-right">
+        <span id="stat-expense-text" class="font-bold text-lg text-gray-900">₦ 0.00</span>
+      </div>
+    </div>
+  </div>
+</section>
 
       </div>
 
@@ -435,6 +461,65 @@
       </button>
     </div>
     
+  </div>
+</div>
+<!-- ==========================================
+     DATE RANGE FILTER MODAL
+========================================== -->
+<div 
+  id="dateFilterModal" 
+  class="fixed inset-0 bg-black/60 z-[120] hidden flex items-center justify-center p-4 backdrop-blur-sm"
+>
+  <div class="bg-white rounded-2xl p-6 sm:p-8 w-full max-w-sm shadow-2xl transform transition-all">
+    <div class="flex justify-between items-center mb-5">
+      <div>
+        <h3 class="text-xl font-bold text-gray-900">Filter by Date</h3>
+        <p class="text-xs text-gray-500 mt-0.5">Select a range to view transactions.</p>
+      </div>
+      <button type="button" onclick="closeDateFilterModal()" class="text-gray-400 hover:text-gray-700 cursor-pointer">
+        <i data-lucide="x" class="w-5 h-5"></i>
+      </button>
+    </div>
+
+    <div class="space-y-4 mb-6">
+      <!-- Start Date -->
+      <div>
+        <label for="filter-start-date" class="block text-xs font-bold text-gray-600 mb-1.5 uppercase">From</label>
+        <input 
+          type="date" 
+          id="filter-start-date" 
+          class="w-full px-4 py-3 rounded-xl bg-gray-50 border border-gray-200 outline-none focus:ring-2 focus:ring-[#19B66B] font-medium text-gray-900 text-sm cursor-pointer"
+        >
+      </div>
+
+      <!-- End Date -->
+      <div>
+        <label for="filter-end-date" class="block text-xs font-bold text-gray-600 mb-1.5 uppercase">To</label>
+        <input 
+          type="date" 
+          id="filter-end-date" 
+          class="w-full px-4 py-3 rounded-xl bg-gray-50 border border-gray-200 outline-none focus:ring-2 focus:ring-[#19B66B] font-medium text-gray-900 text-sm cursor-pointer"
+        >
+      </div>
+    </div>
+
+    <!-- Modal Actions -->
+    <div class="flex gap-3">
+      <button 
+        type="button" 
+        onclick="resetDateFilter()" 
+        class="flex-1 py-3 px-4 bg-gray-100 text-gray-700 font-bold rounded-xl hover:bg-gray-200 transition-colors text-sm cursor-pointer"
+      >
+        Reset
+      </button>
+      <button 
+        type="button" 
+        onclick="applyDateFilter()" 
+        class="flex-1 py-3 px-4 bg-[#19B66B] text-white font-bold rounded-xl hover:bg-green-600 transition-colors text-sm cursor-pointer"
+      >
+        Apply
+      </button>
+    </div>
   </div>
 </div>
   <!-- Scripts -->
