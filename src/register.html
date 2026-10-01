@@ -228,7 +228,7 @@
       </button>
     </form>
     <!-- LOGIN -->
-    <p class="mt-7 text-center text-sm text-gray-500">
+    <p class="mt-7 text-left text-sm text-gray-500">
       Already have an account?
       <a
         href="login.html"
@@ -246,19 +246,25 @@
     <h1
       class="text-3xl font-medium text-reen-green mb-4"
     >
-      Verify your email
+     Email Verification
     </h1>
-    <p
-      class="text-sm leading-6 text-gray-500 mb-8"
-    >
-      A six digit code has been sent to
-      <span
-        id="otp-email"
-        class="font-semibold text-reen-dark"
-      >
-        your email
-      </span>
-    </p>
+   <p class="text-sm leading-6 text-gray-500 mb-8">
+  A six digit code has been sent to
+  <span
+    id="otp-email"
+    class="font-semibold text-reen-dark"
+  >
+    your email
+  </span>
+  <button
+    type="button"
+    id="open-change-email-btn"
+    onclick="openChangeEmailModal()"
+    class="ml-1.5 font-semibold text-reen-green hover:underline cursor-pointer inline-flex items-center gap-1"
+  >
+    Change
+  </button>
+</p>
     <!-- OTP FORM -->
     <form
       id="otp-form"
@@ -305,6 +311,12 @@
           class="otp-input w-full h-14 sm:h-16 rounded-xl border border-gray-200 bg-gray-50 text-center text-xl font-bold text-reen-dark outline-none transition focus:border-reen-green focus:bg-white focus:ring-2 focus:ring-reen-green/10"
         >
       </div>
+      <div class=" -mt-2">
+        <p id="otp-timer-container" class="text-xs font-medium text-reen-green">
+          <span id="otp-timer" class="font-bold text-reen-green">0:45</span> remaining
+        </p>
+      </div>
+      
       <!-- SUBMIT -->
       <button
         type="submit"
@@ -320,7 +332,7 @@
     </form>
     <!-- RESEND -->
     <p
-      class="mt-7 text-center text-sm text-gray-500"
+      class="mt-7 text-left text-sm text-gray-500"
     >
       Didn't receive the code?
       <button
@@ -377,6 +389,98 @@
     >
       Proceed to Dashboard
     </button>
+  </div>
+</div>
+<!-- ==========================================
+     CHANGE EMAIL MODAL (OTP Screen)
+========================================== -->
+<div
+  id="changeEmailModal"
+  class="fixed inset-0 bg-black/60 z-[120] hidden flex items-center justify-center p-4 backdrop-blur-sm"
+>
+  <div class="bg-white rounded-2xl p-6 sm:p-8 w-full max-w-md shadow-2xl relative transform transition-all">
+    <!-- Header -->
+    <div class="flex justify-between items-center mb-5">
+      <div>
+        <h3 class="text-xl font-bold text-gray-900">Change Email</h3>
+        <p class="text-xs text-gray-500 mt-0.5">We'll send your six-digit verification code here.</p>
+      </div>
+      <button
+        type="button"
+        onclick="closeChangeEmailModal()"
+        class="text-gray-400 hover:text-gray-700 transition-colors cursor-pointer"
+      >
+        <i data-lucide="x" class="w-5 h-5"></i>
+      </button>
+    </div>
+
+    <!-- Email Input -->
+    <div class="mb-6">
+      <label for="change-email-input" class="block text-xs font-bold text-gray-700 uppercase mb-2">
+        Email Address
+      </label>
+      <div class="relative">
+        <i data-lucide="mail" class="absolute left-4 top-1/2 -translate-y-1/2 text-gray-400 w-5 h-5"></i>
+        <input
+          type="email"
+          id="change-email-input"
+          placeholder="name@example.com"
+          class="w-full pl-11 pr-4 py-3.5 rounded-xl bg-gray-50 border border-gray-200 outline-none focus:ring-2 focus:ring-reen-green font-medium text-gray-900 text-sm"
+        />
+      </div>
+      <p id="change-email-error" class="text-red-500 text-xs mt-2 hidden font-medium">
+        Please enter a valid email address.
+      </p>
+    </div>
+
+    <!-- Action Buttons -->
+    <div class="flex gap-3">
+      <button
+        type="button"
+        onclick="closeChangeEmailModal()"
+        class="flex-1 py-3.5 px-4 bg-gray-100 text-gray-600 font-bold rounded-xl hover:bg-gray-200 transition-colors text-sm cursor-pointer"
+      >
+        Cancel
+      </button>
+      <button
+        type="button"
+        onclick="saveUpdatedEmail()"
+        class="flex-1 py-3.5 px-4 bg-reen-green text-white font-bold rounded-xl hover:bg-reen-green/90 transition-colors text-sm cursor-pointer"
+      >
+        Update
+      </button>
+    </div>
+  </div>
+</div>
+<!-- ==========================================
+     RESEND OTP SUCCESS MODAL
+========================================== -->
+<div
+  id="resendOtpModal"
+  class="fixed inset-0 bg-black/60 z-[130] hidden flex items-center justify-center p-4 backdrop-blur-sm"
+>
+  <div class="bg-white rounded-3xl px-8 pt-10 pb-10 w-full max-w-sm shadow-2xl text-center transform transition-all">
+    
+    <!-- Success Icon -->
+    <div class="w-20 h-20 rounded-full bg-[#DDF7EE] flex items-center justify-center mx-auto mb-6">
+      <i data-lucide="check-circle-2" class="w-10 h-10 text-[#19B66B]"></i>
+    </div>
+    
+    <h3 class="text-2xl font-bold text-gray-900 mb-2">Code Sent!</h3>
+    
+    <p class="text-gray-500 text-sm mb-8 px-2">
+      A new 6-digit verification code has been generated and sent to your email.
+    </p>
+    
+    <!-- Dismiss Button -->
+    <button
+      type="button"
+      onclick="closeResendOtpModal()"
+      class="w-full cursor-pointer bg-[#19B66B] text-white font-bold py-4 rounded-xl hover:bg-[#159a5a] transition-colors"
+    >
+      Okay
+    </button>
+    
   </div>
 </div>
   <script src="https://unpkg.com/lucide@latest"></script>
